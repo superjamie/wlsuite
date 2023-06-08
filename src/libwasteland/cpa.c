@@ -276,7 +276,7 @@ wlCpaAnimation *wlCpaReadStream(FILE *stream)
 
 /**
  * Writes a CPA animation to a file. The function returns 1 if write was
- * successfull and 0 if write failed. On failure you can check errno for the
+ * successful and 0 if write failed. On failure you can check errno for the
  * reason.
  *
  * @param animation
@@ -359,7 +359,7 @@ static unsigned char *buildAnimationData(wlCpaAnimation *animation, int *size)
 
 /**
  * Writes a CPA animation to a stream. The function returns 1 if write was
- * successfull and 0 if write failed. On failure you can check errno for the
+ * successful and 0 if write failed. On failure you can check errno for the
  * reason.
  *
  * @param animation

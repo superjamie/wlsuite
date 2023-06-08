@@ -10,7 +10,7 @@
 #include "wasteland.h"
 
 /**
- * Reads a huffman tree node (and all it's sub nodes) from the specified stream.
+ * Reads a huffman tree node (and all its sub nodes) from the specified stream.
  * You have to provide pointers to 0-initialized dataByte/dataMask storage
  * bytes for the bit-based IO functions which are used to read the data. You
  * have to release allocated memory with wlHuffmanNodeFree() when you no longer
@@ -20,7 +20,7 @@
  *            The file stream
  * @param dataByte
  *            Storage for last read byte
- * @param dateMask
+ * @param dataMask
  *            Storage for last bit mask
  * @return The read huffman tree node with all its sub nodes
  */
@@ -69,7 +69,7 @@ wlHuffmanNode *wlHuffmanReadNode(FILE *file, unsigned char *dataByte,
  *            The file stream
  * @param dataByte
  *            Storage for last read byte
- * @param dateMask
+ * @param dataMask
  *            Storage for last bit mask
  * @return 1 on success, 0 on failure
  */
@@ -123,7 +123,7 @@ void wlHuffmanFreeNode(wlHuffmanNode *node)
  *            The root node of the huffman tree
  * @param dataByte
  *            Storage for last read byte
- * @param dateMask
+ * @param dataMask
  *            Storage for last bit mask
  * @return The byte which was read from the stream or -1 when read failed
  */
@@ -157,7 +157,7 @@ int wlHuffmanReadByte(FILE *file, wlHuffmanNode *rootNode,
  *            The root node of the huffman tree
  * @param dataByte
  *            Storage for last read byte
- * @param dateMask
+ * @param dataMask
  *            Storage for last bit mask
  * @return 1 on success, 0 on failure
  */
@@ -188,9 +188,9 @@ int wlHuffmanWriteByte(unsigned char byte, FILE *file,
  *            The root node of the huffman tree
  * @param dataByte
  *            Storage for last read byte
- * @param dateMask
+ * @param dataMask
  *            Storage for last bit mask
- * @return The 16 bit litt-endian value or -1 if an error occured while reading
+ * @return The 16 bit little-endian value or -1 if an error occurred while reading
  */
 
 int wlHuffmanReadWord(FILE *stream, wlHuffmanNode *rootNode,
@@ -209,7 +209,7 @@ int wlHuffmanReadWord(FILE *stream, wlHuffmanNode *rootNode,
 
 /**
  * Reads the specified number of bytes and returns them. If <var>block</var>
- * is NULL then the necessary memory is allocated automatically (And you must
+ * is NULL then the necessary memory is allocated automatically (and you must
  * free it yourself afterwards). Otherwise the data is stored in
  * <var>block</var> and the pointer is returned. Returns NULL if reading
  * the data fails.
@@ -225,9 +225,9 @@ int wlHuffmanReadWord(FILE *stream, wlHuffmanNode *rootNode,
  *            The root node of the huffman tree
  * @param dataByte
  *            Storage for last read byte
- * @param dateMask
+ * @param dataMask
  *            Storage for last bit mask
- * @return The 16 bit litt-endian value or -1 if an error occured while reading
+ * @return The 16 bit little-endian value or -1 if an error occurred while reading
  */
 
 unsigned char *wlHuffmanReadBlock(FILE *stream, unsigned char *block, int size,
@@ -260,7 +260,7 @@ unsigned char *wlHuffmanReadBlock(FILE *stream, unsigned char *block, int size,
  *            The huffman node index as provided by wlHuffmanBuildTree()
  * @param dataByte
  *            Storage for last read byte
- * @param dateMask
+ * @param dataMask
  *            Storage for last bit mask
  * @return 1 on success, 0 on failure
  */
@@ -310,7 +310,7 @@ static int compareNode(const void *a, const void *b)
 }
 
 /**
- * Builds the keys for the specified node and all it's subnodes.
+ * Builds the keys for the specified node and all its subnodes.
  *
  * @param node
  *            The huffman tree node
@@ -347,7 +347,7 @@ static void buildKeys(wlHuffmanNode *node, int key, int keyBits)
  * @param node
  *            The node to dump
  * @param indent
- *            Current Indentation level (For recursion). Set to 0 on initial
+ *            Current Indentation level (for recursion). Set to 0 on initial
  *            call.
  */
 

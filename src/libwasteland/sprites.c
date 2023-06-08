@@ -12,7 +12,7 @@
 #include "wasteland.h"
 
 /**
- * Reads sprites from the specified files and returns it as a an array of
+ * Reads sprites from the specified files and returns it as an array of
  * images. You have to release the allocated memory of this array with the
  * wlImagesFree() function when you no longer need it. If an error occurs while
  * reading the source files then NULL is returned and you can use errno to
@@ -98,7 +98,7 @@ wlImages wlSpritesReadStream(FILE *spritesStream, FILE *masksStream)
 							<< bit;
 					}
 
-					// Read transparancy information when last bit has been read
+					// Read transparency information when last bit has been read
 					if (bit == 3) {
 						b = fgetc(masksStream);
 						if (b == EOF)
@@ -122,7 +122,7 @@ wlImages wlSpritesReadStream(FILE *spritesStream, FILE *masksStream)
 }
 
 /**
- * Writes sprites to files. The function returns 1 if write was successfull
+ * Writes sprites to files. The function returns 1 if write was successful
  * and 0 if write failed. In this case you can read the reason from errno.
  *
  * @param sprites
@@ -161,7 +161,7 @@ int wlSpritesWriteFile(wlImages sprites, char *spritesFilename,
  * Writes sprites to streams. The streams must already be open and pointing
  * to the location where you want to write the sprites and the sprite masks to.
  * The streams are not closed by this function so you have to do this yourself.
- * The function returns 1 if write was successfull and 0 if write failed. In
+ * The function returns 1 if write was successful and 0 if write failed. In
  * this case you can read the reason from errno.
  *
  * @param sprites
@@ -200,7 +200,7 @@ int wlSpritesWriteStream(wlImages sprites, FILE *spritesStream,
 					if (fputc(b, spritesStream) == EOF)
 						return 0;
 
-					// Write transparancy information when last bit has been
+					// Write transparency information when last bit has been
 					// written
 					if (bit == 3) {
 						b = 0;

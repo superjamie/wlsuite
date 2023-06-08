@@ -249,7 +249,7 @@ void __strAppendSub(char **destPtr, char *src, size_t index, size_t len)
  *            The string to search in.
  * @param search
  *            The string to search for.
- * @return The position of the first occurence or -1 if no occurence.
+ * @return The position of the first occurrence or -1 if no occurrence.
  */
 ssize_t strFindFirst(char *string, char *search)
 {
@@ -272,7 +272,7 @@ ssize_t strFindFirst(char *string, char *search)
  *            The string to search in.
  * @param search
  *            The string to search for.
- * @return The position of the last occurence or -1 if no occurence.
+ * @return The position of the last occurrence or -1 if no occurrence.
  */
 ssize_t strFindLast(char *string, char *search)
 {
@@ -301,7 +301,7 @@ ssize_t strFindLast(char *string, char *search)
  *            The string to search in.
  * @param search
  *            The character to search for.
- * @return The position of the first occurence or -1 if no occurence.
+ * @return The position of the first occurrence or -1 if no occurrence.
  */
 ssize_t strFindFirstChar(char *string, char search)
 {
@@ -323,7 +323,7 @@ ssize_t strFindFirstChar(char *string, char search)
  *            The string to search in.
  * @param search
  *            The character to search for.
- * @return The position of the last occurence or -1 if no occurence.
+ * @return The position of the last occurrence or -1 if no occurrence.
  */
 ssize_t strFindLastChar(char *string, char search)
 {
@@ -351,7 +351,7 @@ ssize_t strFindLastChar(char *string, char search)
  *            The string to search in.
  * @param search
  *            The string with the search characters.
- * @return The position of the first occurence or -1 if no occurence.
+ * @return The position of the first occurrence or -1 if no occurrence.
  */
 ssize_t strFindFirstOf(char *string, char *search)
 {
@@ -377,7 +377,7 @@ ssize_t strFindFirstOf(char *string, char *search)
  *            The string to search in.
  * @param search
  *            The string with the characters not to search.
- * @return The position of the first occurence or -1 if no occurence.
+ * @return The position of the first occurrence or -1 if no occurrence.
  */
 ssize_t strFindFirstNotOf(char *string, char *search)
 {
@@ -402,7 +402,7 @@ ssize_t strFindFirstNotOf(char *string, char *search)
  *            The string to search in.
  * @param search
  *            The string with the search characters.
- * @return The position of the last occurence or -1 if no occurence.
+ * @return The position of the last occurrence or -1 if no occurrence.
  */
 ssize_t strFindLastOf(char *string, char *search)
 {
@@ -428,7 +428,7 @@ ssize_t strFindLastOf(char *string, char *search)
  *            The string to search in.
  * @param search
  *            The string with the characters not to search.
- * @return The position of the last occurence or -1 if no occurence.
+ * @return The position of the last occurrence or -1 if no occurrence.
  */
 ssize_t strFindLastNotOf(char *string, char *search)
 {
@@ -452,7 +452,7 @@ ssize_t strFindLastNotOf(char *string, char *search)
  *            The string to search in.
  * @param search
  *            The string to count in <var>string</var>.
- * @return The number of occurences.
+ * @return The number of occurrences.
  */
 int strCount(char *string, char *search)
 {
@@ -477,7 +477,7 @@ int strCount(char *string, char *search)
  *            The string to search in.
  * @param search
  *            The character to count in <var>string</var>.
- * @return The number of occurences.
+ * @return The number of occurrences.
  */
 int strCountChar(char *string, char search)
 {
@@ -504,7 +504,7 @@ int strCountChar(char *string, char search)
  * @param search
  *            The string to search.
  * @param replace
- *            The string to replace occurences of <var>search</var> with.
+ *            The string to replace occurrences of <var>search</var> with.
  */
 void __strReplace(char **stringPtr, char *search, char *replace)
 {
@@ -545,7 +545,7 @@ void __strReplace(char **stringPtr, char *search, char *replace)
  * @param search
  *            The character to search.
  * @param replace
- *            The character to replace occurences of <var>search</var> with.
+ *            The character to replace occurrences of <var>search</var> with.
  */
 void strReplaceChar(char *string, char search, char replace)
 {

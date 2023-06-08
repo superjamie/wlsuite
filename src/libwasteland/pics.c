@@ -21,7 +21,7 @@
  *
  * @param filename
  *            The filename of the PICS file to read
- * @return The animated pictures or NULL if an error occured
+ * @return The animated pictures or NULL if an error occurred
  */
 
 wlPicsAnimations wlAnimationsReadFile(char *filename)
@@ -105,7 +105,7 @@ static wlImage readBaseFrame(FILE *stream, wlHuffmanNode *rootNode,
  *            Storage for last read byte
  * @param dataMask
  *            Storage for last bit mask
- * @return The animation instructions or NULL if an error occured.
+ * @return The animation instructions or NULL if an error occurred.
  */
 
 static wlPicsInstructions readInstructions(FILE *stream,
@@ -181,7 +181,7 @@ static wlPicsInstructions readInstructions(FILE *stream,
  *            Storage for last read byte
  * @param dataMask
  *            Storage for last bit mask
- * @return The animation instructions or NULL if an error occured.
+ * @return The animation instructions or NULL if an error occurred.
  */
 
 static wlPicsUpdates readUpdates(FILE *stream, wlHuffmanNode *rootNode,
@@ -270,7 +270,7 @@ static wlPicsUpdates readUpdates(FILE *stream, wlHuffmanNode *rootNode,
  *
  * @param stream
  *            The stream to read the picture animation from.
- * @return The picture animation or NULL if an error occured
+ * @return The picture animation or NULL if an error occurred
  */
 
 wlPicsAnimation wlAnimationReadStream(FILE *stream)

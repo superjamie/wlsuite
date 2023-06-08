@@ -86,7 +86,7 @@ wlImages wlFontReadStream(FILE *stream)
 }
 
 /**
- * Writes a font to a file. The function returns 1 if write was successfull
+ * Writes a font to a file. The function returns 1 if write was successful
  * and 0 if write failed. In this case you can read the reason from errno.
  *
  * @param font
@@ -115,7 +115,7 @@ int wlFontWriteFile(wlImages font, char *filename)
  * Writes a font to a stream. The stream must already be open and pointing
  * to the location where you want to write the font to. The stream is not
  * closed by this function so you have to do this yourself. The function
- * returns 1 if write was successfull and 0 if write failed. In
+ * returns 1 if write was successful and 0 if write failed. In
  * this case you can read the reason from errno.
  *
  * @param font

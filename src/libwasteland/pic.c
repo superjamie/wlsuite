@@ -75,7 +75,7 @@ wlImage wlPicReadStream(FILE *stream)
 }
 
 /**
- * Writes an image to a PIC file. The function returns 1 if write was successfull
+ * Writes an image to a PIC file. The function returns 1 if write was successful
  * and 0 if write failed. On failure you can check errno for the reason.
  *
  * @param image
@@ -104,7 +104,7 @@ int wlPicWriteFile(wlImage image, char *filename)
  * Writes the specified image to a file stream. The stream must already be open
  * and pointing to the location where you want to write the pic to. The stream
  * is not closed by this function so you have to do this yourself. The function
- * returns 1 if write was successfull and 0 if write failed.
+ * returns 1 if write was successful and 0 if write failed.
  *
  * @param image
  *            The image to write

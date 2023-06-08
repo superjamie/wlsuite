@@ -22,9 +22,9 @@
  * cursors->images[cursorNo]->pixels[y * 16 + x]. A pixel is an integer between
  * 0 and 255. The lower 4 bits is the EGA color palette index. The higher 4
  * bits are the transparency bits for the lower 4 bit. So if bit 4 is set then
- * this means that bit 0 (The blue component) is transparent. This feature is
+ * this means that bit 0 (the blue component) is transparent. This feature is
  * not used in the original wasteland cursors. These original cursors only have
- * fully solid pixels or fully transparent pixels (Which means that all high
+ * fully solid pixels or fully transparent pixels (which means that all high
  * bits are set if the pixel is transparent or they are cleared if the pixel
  * is solid). If you don't need sub-pixel-transparency either then you can
  * interpret the value like this: If the pixel value is lower than 16 then the
@@ -64,9 +64,9 @@ wlImages wlCursorsReadFile(char *filename)
  * cursors->images[cursorNo]->pixels[y * 16 + x]. A pixel is an integer between
  * 0 and 255. The lower 4 bits is the EGA color palette index. The higher 4
  * bits are the transparency bits for the lower 4 bit. So if bit 4 is set then
- * this means that bit 0 (The blue component) is transparent. This feature is
+ * this means that bit 0 (the blue component) is transparent. This feature is
  * not used in the original wasteland cursors. These original cursors only have
- * fully solid pixels or fully transparent pixels (Which means that all high
+ * fully solid pixels or fully transparent pixels (which means that all high
  * bits are set if the pixel is transparent or they are cleared if the pixel
  * is solid). If you don't need sub-pixel-transparency either then you can
  * interpret the value like this: If the pixel value is lower than 16 then the
@@ -130,7 +130,7 @@ wlImages wlCursorsReadStream(FILE *stream)
 }
 
 /**
- * Writes cursors to a file. The function returns 1 if write was successfull
+ * Writes cursors to a file. The function returns 1 if write was successful
  * and 0 if write failed. In this case you can read the reason from errno.
  *
  * @param cursors
@@ -159,7 +159,7 @@ int wlCursorsWriteFile(wlImages cursors, char *filename)
  * Writes cursors to a stream. The stream must already be open and pointing
  * to the location where you want to write the cursors to. The stream is not
  * closed by this function so you have to do this yourself. The function
- * returns 1 if write was successfull and 0 if write failed. In
+ * returns 1 if write was successful and 0 if write failed. In
  * this case you can read the reason from errno.
  *
  * @param cursors

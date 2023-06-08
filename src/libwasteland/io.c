@@ -12,12 +12,12 @@
  * is read and stored in <var>dataByte</var>. In <var>dataMask</var> this
  * function remembers which bit was read in previous calls to this method. Make
  * sure these two variables are initialized with 0 when you start reading bits.
- * 
+ *
  * @param file
  *            The file stream from which data is read
  * @param dataByte
  *            Storage for last read byte
- * @param dateMask
+ * @param dataMask
  *            Storage for last bit mask
  * @return The bit (0 or 1) which has been read or -1 if read failed
  */
@@ -42,14 +42,14 @@ int wlReadBit(FILE *file, unsigned char *dataByte, unsigned char *dataMask)
  * In <var>dataMask</var> this function remembers which bit was write in
  * previous calls. Make sure these two variables are initialized with 0 when
  * you start writing bits.
- * 
+ *
  * @param bit
  *            The bit to write
  * @param file
  *            The file stream to which data is written
  * @param dataByte
  *            Storage for last read byte
- * @param dateMask
+ * @param dataMask
  *            Storage for last bit mask
  * @return 1 on success, 0 on failure
  */
@@ -74,12 +74,12 @@ int wlWriteBit(char bit, FILE *file, unsigned char *dataByte,
  * wlReadBit() 8 times to read 8 bits from the current bit position in the
  * stream. You have to provide pointers to a data byte and a
  * data mask to keep track of the bits.
- * 
+ *
  * @param file
  *            The file stream from which data is read
  * @param dataByte
  *            Storage for last read byte
- * @param dateMask
+ * @param dataMask
  *            Storage for last bit mask
  * @return The byte which has been read or -1 if read failed
  */
@@ -103,14 +103,14 @@ int wlReadByte(FILE *file, unsigned char *dataByte, unsigned char *dataMask)
  * wlWriteBit() 8 times to write 8 bits to the current bit position in the
  * stream. You have to provide pointers to a data byte and a
  * data mask to keep track of the bits. Returns 1 on success, 0 on failure.
- * 
+ *
  * @param byte
  *            The byte to write
  * @param file
  *            The file stream to write the data to
  * @param dataByte
  *            Storage for last read byte
- * @param dateMask
+ * @param dataMask
  *            Storage for last bit mask
  * @return 1 on success, 0 on failure
  */
@@ -130,17 +130,17 @@ int wlWriteByte(unsigned char byte, FILE *file, unsigned char *dataByte,
 
 /**
  * In case previous bit writes have not filled a whole byte yet this function
- * fills the remaining bits with the specified bit and therfor forces a write
+ * fills the remaining bits with the specified bit and therefore forces a write
  * of the byte. If we are already at a byte boundary then this function does
- * nothing. Function returns 1 on success and 0 on failure. 
- * 
+ * nothing. Function returns 1 on success and 0 on failure.
+ *
  * @param bit
  *            The bit to fill the unfinished byte with
  * @param file
  *            The file stream to which data is written
  * @param dataByte
  *            Storage for last read byte
- * @param dateMask
+ * @param dataMask
  *            Storage for last bit mask
  * @return 1 on success, 0 on failure
  */
@@ -157,8 +157,8 @@ int wlFillByte(char bit, FILE *file, unsigned char *dataByte,
 
 /**
  * Writes a 32 bit unsigned integer to a stream. Returns 1 on success and 0
- * on failure. 
- * 
+ * on failure.
+ *
  * @param dword
  *            The data to write
  * @param file

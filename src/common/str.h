@@ -21,7 +21,7 @@
  * @param dest
  *            The destination string to append the characters to.
  * @param src
- *            The soruce string to get the characters from.
+ *            The source string to get the characters from.
  */
 #define strAppend(dest, src) __strAppend(&dest, src);
 
@@ -73,7 +73,7 @@
  * @param search
  *            The string to search.
  * @param replace
- *            The string to replace occurences of <var>search</var> with.
+ *            The string to replace occurrences of <var>search</var> with.
  */
 #define strReplace(string, search, replace) \
 	__strReplace(&string, search, replace)
