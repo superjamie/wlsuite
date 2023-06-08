@@ -10,7 +10,6 @@
 #include <errno.h>
 #include <string.h>
 #include "wasteland.h"
-    
 
 /**
  * Creates a new image with the specified size. When you no longer need this
@@ -26,16 +25,15 @@
 wlImage wlImageCreate(int width, int height)
 {
 	wlImage image;
-	
+
 	assert(width > 0);
 	assert(height > 0);
-	image = (wlImage) malloc(sizeof(wlImageStruct));
+	image = (wlImage)malloc(sizeof(wlImageStruct));
 	image->width = width;
 	image->height = height;
-	image->pixels = (wlPixel *) malloc(sizeof(wlPixel) * width * height);
+	image->pixels = (wlPixel *)malloc(sizeof(wlPixel) * width * height);
 	return image;
 }
-
 
 /**
  * Releases all the memory allocated for the specified image.
@@ -46,11 +44,10 @@ wlImage wlImageCreate(int width, int height)
 
 void wlImageFree(wlImage image)
 {
-    assert(image != NULL);
-    free(image->pixels);
-    free(image);
+	assert(image != NULL);
+	free(image->pixels);
+	free(image);
 }
-
 
 /**
  * Clones the specified image. You must free the clone with wlImageFree()
@@ -64,13 +61,13 @@ void wlImageFree(wlImage image)
 wlImage wlImageClone(wlImage image)
 {
 	wlImage clone;
-	
+
 	assert(image != NULL);
 	clone = wlImageCreate(image->width, image->height);
-	memcpy(clone->pixels, image->pixels, sizeof(wlPixel) * image->width * image->height);
+	memcpy(clone->pixels, image->pixels,
+	       sizeof(wlPixel) * image->width * image->height);
 	return clone;
 }
-
 
 /**
  * Performs a vertical xor encoding on the specified image.
@@ -81,9 +78,8 @@ wlImage wlImageClone(wlImage image)
 
 void wlImageVXorEncode(wlImage image)
 {
-    wlVXorEncode(image->pixels, image->width, image->height);
+	wlVXorEncode(image->pixels, image->width, image->height);
 }
-
 
 /**
  * Performs a vertical xor decoding on the specified image.

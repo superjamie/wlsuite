@@ -9,8 +9,7 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <string.h>
-#include "wasteland.h"    
-
+#include "wasteland.h"
 
 /**
  * Reads a font from the specified file and returns the font glyphs as a list
@@ -30,17 +29,17 @@
 
 wlImages wlFontReadFile(char *filename)
 {
-    FILE *file;
-    wlImages font;
-    
-    assert(filename != NULL);
-    file = fopen(filename, "rb");
-    if (!file) return NULL;
-    font = wlFontReadStream(file);
-    fclose(file);
-    return font;
-}
+	FILE *file;
+	wlImages font;
 
+	assert(filename != NULL);
+	file = fopen(filename, "rb");
+	if (!file)
+		return NULL;
+	font = wlFontReadStream(file);
+	fclose(file);
+	return font;
+}
 
 /**
  * Reads a font from the specified file stream. The stream must already be
@@ -63,32 +62,28 @@ wlImages wlFontReadFile(char *filename)
 
 wlImages wlFontReadStream(FILE *stream)
 {
-    wlImages font;
-    wlImage image;
-    int glyph, bit, y, pixel, b;
-    
-    assert(stream != NULL);
-    font = wlImagesCreate(172, 8, 8);
-    for (glyph = 0; glyph < 172; glyph++)
-    {
-        image = font->images[glyph];
-        for (bit = 0; bit < 4; bit++)
-        {
-            for (y = 0; y < image->height; y++)
-            {
-                b = fgetc(stream);
-                if (b == EOF) return NULL;
-                for (pixel = 0; pixel < image->width; pixel++)
-                {
-                    image->pixels[y * image->width + pixel] |=
-                        ((b >> (7 - pixel)) & 1) << bit;
-                }
-            }
-        }
-    }
-    return font;
-}
+	wlImages font;
+	wlImage image;
+	int glyph, bit, y, pixel, b;
 
+	assert(stream != NULL);
+	font = wlImagesCreate(172, 8, 8);
+	for (glyph = 0; glyph < 172; glyph++) {
+		image = font->images[glyph];
+		for (bit = 0; bit < 4; bit++) {
+			for (y = 0; y < image->height; y++) {
+				b = fgetc(stream);
+				if (b == EOF)
+					return NULL;
+				for (pixel = 0; pixel < image->width; pixel++) {
+					image->pixels[y * image->width + pixel] |=
+						((b >> (7 - pixel)) & 1) << bit;
+				}
+			}
+		}
+	}
+	return font;
+}
 
 /**
  * Writes a font to a file. The function returns 1 if write was successfull
@@ -103,18 +98,18 @@ wlImages wlFontReadStream(FILE *stream)
 
 int wlFontWriteFile(wlImages font, char *filename)
 {
-    FILE *file;
-    int result;
-    
-    assert(font != NULL);
-    assert(filename != NULL);
-    file = fopen(filename, "wb");
-    if (!file) return 0;
-    result = wlFontWriteStream(font, file);
-    fclose(file);
-    return result;
-}
+	FILE *file;
+	int result;
 
+	assert(font != NULL);
+	assert(filename != NULL);
+	file = fopen(filename, "wb");
+	if (!file)
+		return 0;
+	result = wlFontWriteStream(font, file);
+	fclose(file);
+	return result;
+}
 
 /**
  * Writes a font to a stream. The stream must already be open and pointing
@@ -132,27 +127,27 @@ int wlFontWriteFile(wlImages font, char *filename)
 
 int wlFontWriteStream(wlImages font, FILE *stream)
 {
-    int glyph, bit, y, pixel, b;
-    wlImage image;
- 
-    assert(font != NULL);
-    assert(stream != NULL);
-    for (glyph = 0; glyph < font->quantity; glyph++)
-    {
-        image = font->images[glyph];
-        for (bit = 0; bit < 4; bit++)   
-        {
-            for (y = 0; y < image->height; y++)
-            { 
-                b = 0;
-                for (pixel = 0; pixel < image->width; pixel++)
-                {
-                    b |= ((image->pixels[y * image->width + pixel] >> bit) & 0x01) <<
-                        (7 - pixel);
-                }
-                if (fputc(b, stream) == EOF) return 0;
-            }
-        }
-    }
-    return 1;
+	int glyph, bit, y, pixel, b;
+	wlImage image;
+
+	assert(font != NULL);
+	assert(stream != NULL);
+	for (glyph = 0; glyph < font->quantity; glyph++) {
+		image = font->images[glyph];
+		for (bit = 0; bit < 4; bit++) {
+			for (y = 0; y < image->height; y++) {
+				b = 0;
+				for (pixel = 0; pixel < image->width; pixel++) {
+					b |= ((image->pixels[y * image->width +
+							     pixel] >>
+					       bit) &
+					      0x01)
+					     << (7 - pixel);
+				}
+				if (fputc(b, stream) == EOF)
+					return 0;
+			}
+		}
+	}
+	return 1;
 }

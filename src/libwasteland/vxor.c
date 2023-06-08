@@ -10,7 +10,6 @@
 #include <string.h>
 #include "wasteland.h"
 
-
 /**
  * Decodes a data block with the vertical xor scheme. The data is modified
  * in-place so if you don't want your data to be modified then you have to
@@ -26,19 +25,16 @@
 
 void wlVXorDecode(unsigned char *data, int width, int height)
 {
-    int x, y;
-    unsigned char xor;
-    
-    for (y = 0; y < height; y++)
-    {
-        for (x = 0; x < width; x++)
-        {
-            xor = y == 0 ? 0 : data[(y - 1) * width + x];
-            data[y * width + x] ^= xor;
-        }
-    }
-}
+	int x, y;
+	unsigned char xor ;
 
+	for (y = 0; y < height; y++) {
+		for (x = 0; x < width; x++) {
+			xor = y == 0 ? 0 : data[(y - 1) * width + x];
+			data[y * width + x] ^= xor;
+		}
+	}
+}
 
 /**
  * Encodes a data block with the vertical xor scheme. The data is modified
@@ -55,19 +51,17 @@ void wlVXorDecode(unsigned char *data, int width, int height)
 
 void wlVXorEncode(unsigned char *data, int width, int height)
 {
-    unsigned char *xors, byte, xor;
-    int x, y;
-    
-    xors = malloc(width * sizeof(unsigned char));
-    for (y = 0; y < height; y++)
-    {
-        for (x = 0; x < width; x++)
-        {
-            byte = data[y * width + x];
-            xor = y == 0 ? 0 : xors[x];
-            data[y * width + x] = byte ^ xor;
-            xors[x] = byte;
-        }
-    }
-    free(xors);
+	unsigned char *xors, byte, xor;
+	int x, y;
+
+	xors = malloc(width * sizeof(unsigned char));
+	for (y = 0; y < height; y++) {
+		for (x = 0; x < width; x++) {
+			byte = data[y * width + x];
+			xor = y == 0 ? 0 : xors[x];
+			data[y * width + x] = byte ^ xor;
+			xors[x] = byte;
+		}
+	}
+	free(xors);
 }

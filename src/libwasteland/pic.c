@@ -11,7 +11,6 @@
 #include <string.h>
 #include "wasteland.h"
 
-
 /**
  * Reads image from the specified PIC file and returns them. You have to
  * free the allocated memory for the returned image with the wlImageFree()
@@ -27,17 +26,17 @@
 
 wlImage wlPicReadFile(char *filename)
 {
-    FILE *file;
-    wlImage image;
+	FILE *file;
+	wlImage image;
 
-    assert(filename != NULL);
-    file = fopen(filename, "rb");
-    if (!file) return NULL;
-    image = wlPicReadStream(file);
-    fclose(file);
-    return image;
+	assert(filename != NULL);
+	file = fopen(filename, "rb");
+	if (!file)
+		return NULL;
+	image = wlPicReadStream(file);
+	fclose(file);
+	return image;
 }
-
 
 /**
  * Reads image from a PIC file stream and returns them. The stream must
@@ -56,26 +55,24 @@ wlImage wlPicReadFile(char *filename)
 
 wlImage wlPicReadStream(FILE *stream)
 {
-    wlImage image;
-    int x, y;
-    int b;
+	wlImage image;
+	int x, y;
+	int b;
 
-    image = wlImageCreate(288, 128);
-    for (y = 0; y < image->height; y++)
-    {
-        for (x = 0; x < image->width; x+= 2)
-        {
-            b = fgetc(stream);
-            if (b == EOF) return NULL;
-            image->pixels[y * image->width + x] = b >> 4;
-            image->pixels[y * image->width + x + 1] = b & 0x0f;
-        }
-    }
+	image = wlImageCreate(288, 128);
+	for (y = 0; y < image->height; y++) {
+		for (x = 0; x < image->width; x += 2) {
+			b = fgetc(stream);
+			if (b == EOF)
+				return NULL;
+			image->pixels[y * image->width + x] = b >> 4;
+			image->pixels[y * image->width + x + 1] = b & 0x0f;
+		}
+	}
 
-    wlImageVXorDecode(image);
-    return image;
+	wlImageVXorDecode(image);
+	return image;
 }
-
 
 /**
  * Writes an image to a PIC file. The function returns 1 if write was successfull
@@ -90,18 +87,18 @@ wlImage wlPicReadStream(FILE *stream)
 
 int wlPicWriteFile(wlImage image, char *filename)
 {
-    FILE *file;
-    int result;
+	FILE *file;
+	int result;
 
-    assert(image != NULL);
-    assert(filename != NULL);
-    file = fopen(filename, "wb");
-    if (!file) return 0;
-    result = wlPicWriteStream(image, file);
-    fclose(file);
-    return result;
+	assert(image != NULL);
+	assert(filename != NULL);
+	file = fopen(filename, "wb");
+	if (!file)
+		return 0;
+	result = wlPicWriteStream(image, file);
+	fclose(file);
+	return result;
 }
-
 
 /**
  * Writes the specified image to a file stream. The stream must already be open
@@ -118,34 +115,33 @@ int wlPicWriteFile(wlImage image, char *filename)
 
 int wlPicWriteStream(wlImage image, FILE *stream)
 {
-    int x, y;
-    int pixel;
-    wlImage encodedImage;
+	int x, y;
+	int pixel;
+	wlImage encodedImage;
 
-    assert(image != NULL);
-    assert(image->width % 2 == 0);
-    assert(stream != NULL);
+	assert(image != NULL);
+	assert(image->width % 2 == 0);
+	assert(stream != NULL);
 
-    /* Encode the pixels */
-    encodedImage = wlImageClone(image);
-    wlImageVXorEncode(encodedImage);
+	/* Encode the pixels */
+	encodedImage = wlImageClone(image);
+	wlImageVXorEncode(encodedImage);
 
-    /* Write encoded pixels to stream */
-    for (y = 0; y < image->height; y++)
-    {
-        for (x = 0; x < image->width; x += 2)
-        {
-            pixel = (encodedImage->pixels[y * image->width + x] << 4)
-                | (encodedImage->pixels[y * image->width + x + 1] & 0x0f);
-            if (fputc(pixel, stream) == EOF)
-            {
-            	wlImageFree(encodedImage);
-            	return 0;
-            }
-        }
-    }
+	/* Write encoded pixels to stream */
+	for (y = 0; y < image->height; y++) {
+		for (x = 0; x < image->width; x += 2) {
+			pixel = (encodedImage->pixels[y * image->width + x]
+				 << 4) |
+				(encodedImage->pixels[y * image->width + x + 1] &
+				 0x0f);
+			if (fputc(pixel, stream) == EOF) {
+				wlImageFree(encodedImage);
+				return 0;
+			}
+		}
+	}
 
-    /* Release encoded pixels and report success */
-    wlImageFree(encodedImage);
-    return 1;
+	/* Release encoded pixels and report success */
+	wlImageFree(encodedImage);
+	return 1;
 }

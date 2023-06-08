@@ -22,16 +22,15 @@
  */
 static int _strcasecmp(char *s1, char *s2)
 {
-    int c1, c2;
-    
-    do
-    {
-        c1 = tolower(*s1++);
-        c2 = tolower(*s2++);
-        if (c1 != c2) return c1 < c2 ? -1 : 1;
-    }
-    while (c1 != 0);
-    return 0;
+	int c1, c2;
+
+	do {
+		c1 = tolower(*s1++);
+		c2 = tolower(*s2++);
+		if (c1 != c2)
+			return c1 < c2 ? -1 : 1;
+	} while (c1 != 0);
+	return 0;
 }
 
 /**
@@ -48,16 +47,17 @@ static int _strcasecmp(char *s1, char *s2)
  */
 static int _strncasecmp(char *s1, char *s2, size_t n)
 {
-    int c1, c2;
-    
-    while (n--)
-    {
-        c1 = tolower(*s1++);
-        c2 = tolower(*s2++);
-        if (c1 != c2) return c1 < c2 ? -1 : 1;
-        if (c1 == 0) return 0;
-    }
-    return 0;
+	int c1, c2;
+
+	while (n--) {
+		c1 = tolower(*s1++);
+		c2 = tolower(*s2++);
+		if (c1 != c2)
+			return c1 < c2 ? -1 : 1;
+		if (c1 == 0)
+			return 0;
+	}
+	return 0;
 }
 
 /**
@@ -67,11 +67,11 @@ static int _strncasecmp(char *s1, char *s2, size_t n)
  */
 char *strCreate()
 {
-    char *ns;
+	char *ns;
 
-    ns = (char *) malloc(1);
-    ns[0] = 0;
-    return ns;
+	ns = (char *)malloc(1);
+	ns[0] = 0;
+	return ns;
 }
 
 /**
@@ -83,14 +83,14 @@ char *strCreate()
  */
 char *strDup(char *string)
 {
-    char *newString;
-    size_t len;
+	char *newString;
+	size_t len;
 
-    assert(string != NULL);
-    len = strlen(string) + 1;
-    newString = (char *) malloc(len);
-    memcpy(newString, string, len);
-    return newString;
+	assert(string != NULL);
+	len = strlen(string) + 1;
+	newString = (char *)malloc(len);
+	memcpy(newString, string, len);
+	return newString;
 }
 
 /**
@@ -101,8 +101,8 @@ char *strDup(char *string)
  */
 void strFree(char *string)
 {
-    assert(string != NULL);
-    free(string);
+	assert(string != NULL);
+	free(string);
 }
 
 /**
@@ -114,8 +114,8 @@ void strFree(char *string)
  */
 size_t strLength(char *string)
 {
-    assert(string != NULL);
-    return strlen(string);
+	assert(string != NULL);
+	return strlen(string);
 }
 
 /**
@@ -130,9 +130,10 @@ size_t strLength(char *string)
  */
 int strEquals(char *string1, char *string2)
 {
-    assert(string1 != NULL);
-    if (!string2) return 0;
-    return strcmp(string1, string2) == 0;
+	assert(string1 != NULL);
+	if (!string2)
+		return 0;
+	return strcmp(string1, string2) == 0;
 }
 
 /**
@@ -146,9 +147,10 @@ int strEquals(char *string1, char *string2)
  */
 int strEqualsIgnoreCase(char *string1, char *string2)
 {
-    assert(string1 != NULL);
-    if (!string2) return 0;
-    return _strcasecmp(string1, string2) == 0;
+	assert(string1 != NULL);
+	if (!string2)
+		return 0;
+	return _strcasecmp(string1, string2) == 0;
 }
 
 /**
@@ -162,11 +164,11 @@ int strEqualsIgnoreCase(char *string1, char *string2)
  */
 void __strCopy(char **destPtr, char *src)
 {
-    assert(destPtr != NULL);
-    assert(*destPtr != NULL);
-    assert(src != NULL);
-    *destPtr = (char *) realloc(*destPtr, strlen(src) + 1);
-    strcpy(*destPtr, src);
+	assert(destPtr != NULL);
+	assert(*destPtr != NULL);
+	assert(src != NULL);
+	*destPtr = (char *)realloc(*destPtr, strlen(src) + 1);
+	strcpy(*destPtr, src);
 }
 
 /**
@@ -180,12 +182,14 @@ void __strCopy(char **destPtr, char *src)
  */
 void __strAppend(char **destPtr, char *src)
 {
-    assert(destPtr != NULL);
-    assert(*destPtr != NULL);
-    assert(src != NULL);
-    if (strLength(src) == 0) return;
-    *destPtr = (char *) realloc(*destPtr, strlen(*destPtr) + strlen(src) + 1);
-    strcat(*destPtr, src);
+	assert(destPtr != NULL);
+	assert(*destPtr != NULL);
+	assert(src != NULL);
+	if (strLength(src) == 0)
+		return;
+	*destPtr =
+		(char *)realloc(*destPtr, strlen(*destPtr) + strlen(src) + 1);
+	strcat(*destPtr, src);
 }
 
 /**
@@ -203,14 +207,14 @@ void __strAppend(char **destPtr, char *src)
  */
 void __strCopySub(char **destPtr, char *src, size_t index, size_t len)
 {
-    assert(destPtr != NULL);
-    assert(*destPtr != NULL);
-    assert(src != NULL);
-    assert(index >= 0 && index <= strlen(src));
-    assert(len >= 0 && len <= strlen(src) - index);
-    *destPtr = (char *) realloc(*destPtr, len + 1);
-    strncpy(*destPtr, &src[index], len);
-    (*destPtr)[len] = 0;
+	assert(destPtr != NULL);
+	assert(*destPtr != NULL);
+	assert(src != NULL);
+	assert(index >= 0 && index <= strlen(src));
+	assert(len >= 0 && len <= strlen(src) - index);
+	*destPtr = (char *)realloc(*destPtr, len + 1);
+	strncpy(*destPtr, &src[index], len);
+	(*destPtr)[len] = 0;
 }
 
 /**
@@ -228,15 +232,14 @@ void __strCopySub(char **destPtr, char *src, size_t index, size_t len)
  */
 void __strAppendSub(char **destPtr, char *src, size_t index, size_t len)
 {
-    assert(destPtr != NULL);
-    assert(*destPtr != NULL);
-    assert(src != NULL);
-    assert(index >= 0 && index <= strlen(src));
-    assert(len >= 0 && len <= strlen(src) - index);
-    *destPtr = (char *) realloc(*destPtr, strlen(*destPtr) + len + 1);
-    strncat(*destPtr, &src[index], len);
+	assert(destPtr != NULL);
+	assert(*destPtr != NULL);
+	assert(src != NULL);
+	assert(index >= 0 && index <= strlen(src));
+	assert(len >= 0 && len <= strlen(src) - index);
+	*destPtr = (char *)realloc(*destPtr, strlen(*destPtr) + len + 1);
+	strncat(*destPtr, &src[index], len);
 }
-
 
 /**
  * Returns the index of the first occurrence of the specified search string in
@@ -250,15 +253,15 @@ void __strAppendSub(char **destPtr, char *src, size_t index, size_t len)
  */
 ssize_t strFindFirst(char *string, char *search)
 {
-    char *pos;
+	char *pos;
 
-    assert(string != NULL);
-    assert(search != NULL);
-    pos = strstr(string, search);
-    if (pos)
-        return (size_t) (pos - string);
-    else
-        return -1;
+	assert(string != NULL);
+	assert(search != NULL);
+	pos = strstr(string, search);
+	if (pos)
+		return (size_t)(pos - string);
+	else
+		return -1;
 }
 
 /**
@@ -273,22 +276,21 @@ ssize_t strFindFirst(char *string, char *search)
  */
 ssize_t strFindLast(char *string, char *search)
 {
-    char *pos;
-    char *lastpos;
+	char *pos;
+	char *lastpos;
 
-    assert(string != NULL);
-    assert(search != NULL);
-    lastpos = NULL;
-    pos = strstr(string, search);
-    while (pos)
-    {
-        lastpos = pos;
-        pos = strstr(pos+1, search);
-    }
-    if (lastpos)
-        return (size_t) (lastpos - string);
-    else
-        return -1;
+	assert(string != NULL);
+	assert(search != NULL);
+	lastpos = NULL;
+	pos = strstr(string, search);
+	while (pos) {
+		lastpos = pos;
+		pos = strstr(pos + 1, search);
+	}
+	if (lastpos)
+		return (size_t)(lastpos - string);
+	else
+		return -1;
 }
 
 /**
@@ -303,14 +305,14 @@ ssize_t strFindLast(char *string, char *search)
  */
 ssize_t strFindFirstChar(char *string, char search)
 {
-    char *pos;
+	char *pos;
 
-    assert(string != NULL);
-    pos = strchr(string, search);
-    if (pos)
-        return (size_t) (pos - string);
-    else
-        return -1;
+	assert(string != NULL);
+	pos = strchr(string, search);
+	if (pos)
+		return (size_t)(pos - string);
+	else
+		return -1;
 }
 
 /**
@@ -325,21 +327,20 @@ ssize_t strFindFirstChar(char *string, char search)
  */
 ssize_t strFindLastChar(char *string, char search)
 {
-    char *pos;
-    char *lastpos;
+	char *pos;
+	char *lastpos;
 
-    assert(string != NULL);
-    lastpos = NULL;
-    pos = strchr(string, search);
-    while (pos)
-    {
-        lastpos = pos;
-        pos = strchr(pos + 1, search);
-    }
-    if (lastpos)
-        return (size_t) (lastpos - string);
-    else
-        return -1;
+	assert(string != NULL);
+	lastpos = NULL;
+	pos = strchr(string, search);
+	while (pos) {
+		lastpos = pos;
+		pos = strchr(pos + 1, search);
+	}
+	if (lastpos)
+		return (size_t)(lastpos - string);
+	else
+		return -1;
 }
 
 /**
@@ -354,17 +355,17 @@ ssize_t strFindLastChar(char *string, char search)
  */
 ssize_t strFindFirstOf(char *string, char *search)
 {
-    char *pos;
+	char *pos;
 
-    assert(string != NULL);
-    assert(search != NULL);
-    pos = string;
-    while (*pos)
-    {
-        if (strchr(search, *pos)) break;
-        pos++;
-    }
-    return *pos ? (size_t) (pos - string) : -1;
+	assert(string != NULL);
+	assert(search != NULL);
+	pos = string;
+	while (*pos) {
+		if (strchr(search, *pos))
+			break;
+		pos++;
+	}
+	return *pos ? (size_t)(pos - string) : -1;
 }
 
 /**
@@ -380,17 +381,17 @@ ssize_t strFindFirstOf(char *string, char *search)
  */
 ssize_t strFindFirstNotOf(char *string, char *search)
 {
-    char *pos;
+	char *pos;
 
-    assert(string != NULL);
-    assert(search != NULL);
-    pos = string;
-    while (*pos)
-    {
-        if (!strchr(search, *pos)) break;
-        pos++;
-    }
-    return *pos ? (size_t) (pos - string) : -1;
+	assert(string != NULL);
+	assert(search != NULL);
+	pos = string;
+	while (*pos) {
+		if (!strchr(search, *pos))
+			break;
+		pos++;
+	}
+	return *pos ? (size_t)(pos - string) : -1;
 }
 
 /**
@@ -405,17 +406,17 @@ ssize_t strFindFirstNotOf(char *string, char *search)
  */
 ssize_t strFindLastOf(char *string, char *search)
 {
-    char *pos;
+	char *pos;
 
-    assert(string != NULL);
-    assert(search != NULL);
-    pos = string + strlen(string) - 1;
-    while (pos >= string)
-    {
-        if (strchr(search, *pos)) break;
-        pos--;
-    }
-    return pos >= string ? (size_t) (pos - string) : -1;
+	assert(string != NULL);
+	assert(search != NULL);
+	pos = string + strlen(string) - 1;
+	while (pos >= string) {
+		if (strchr(search, *pos))
+			break;
+		pos--;
+	}
+	return pos >= string ? (size_t)(pos - string) : -1;
 }
 
 /**
@@ -431,17 +432,17 @@ ssize_t strFindLastOf(char *string, char *search)
  */
 ssize_t strFindLastNotOf(char *string, char *search)
 {
-    char *pos;
+	char *pos;
 
-    assert(string != NULL);
-    assert(search != NULL);
-    pos = string + strlen(string) - 1;
-    while (pos >= string)
-    {
-        if (!strchr(search, *pos)) break;
-        pos--;
-    }
-    return pos >= string ? (size_t) (pos - string) : -1;
+	assert(string != NULL);
+	assert(search != NULL);
+	pos = string + strlen(string) - 1;
+	while (pos >= string) {
+		if (!strchr(search, *pos))
+			break;
+		pos--;
+	}
+	return pos >= string ? (size_t)(pos - string) : -1;
 }
 
 /**
@@ -455,19 +456,18 @@ ssize_t strFindLastNotOf(char *string, char *search)
  */
 int strCount(char *string, char *search)
 {
-    int c;
-    char *pos;
-    c=0;
+	int c;
+	char *pos;
+	c = 0;
 
-    assert(string != NULL);
-    assert(search != NULL);
-    pos = strstr(string, search);
-    while (pos)
-    {
-        c++;
-        pos = strstr(pos + 1, search);
-    }
-    return c;
+	assert(string != NULL);
+	assert(search != NULL);
+	pos = strstr(string, search);
+	while (pos) {
+		c++;
+		pos = strstr(pos + 1, search);
+	}
+	return c;
 }
 
 /**
@@ -481,18 +481,17 @@ int strCount(char *string, char *search)
  */
 int strCountChar(char *string, char search)
 {
-    int c;
-    char *pos;
-    c=0;
+	int c;
+	char *pos;
+	c = 0;
 
-    assert(string != NULL);
-    pos = strchr(string, search);
-    while (pos)
-    {
-        c++;
-        pos = strchr(pos + 1, search);
-    }
-    return c;
+	assert(string != NULL);
+	pos = strchr(string, search);
+	while (pos) {
+		c++;
+		pos = strchr(pos + 1, search);
+	}
+	return c;
 }
 
 /**
@@ -509,34 +508,32 @@ int strCountChar(char *string, char search)
  */
 void __strReplace(char **stringPtr, char *search, char *replace)
 {
-    int c;
-    char *ns;
-    char *pos;
-    char *newpos;
-    size_t l;
+	int c;
+	char *ns;
+	char *pos;
+	char *newpos;
+	size_t l;
 
-    assert(stringPtr != NULL);
-    assert(*stringPtr != NULL);
-    assert(search != NULL);
-    assert(replace != NULL);
-    c = strCount(*stringPtr, search);
-    ns = (char *) malloc(strlen(*stringPtr)
-        - c * strlen(search)
-        + c * strlen(replace) + 1);
-    l = strlen(search);
-    *ns = 0;
-    pos = *stringPtr;
-    newpos = strstr(pos, search);
-    while (newpos)
-    {
-        strncat(ns, pos, newpos - pos);
-        strcat(ns, replace);
-        pos += newpos - pos + l;
-        newpos = strstr(pos, search);
-    }
-    strcat(ns, pos);
-    free(*stringPtr);
-    *stringPtr = ns;
+	assert(stringPtr != NULL);
+	assert(*stringPtr != NULL);
+	assert(search != NULL);
+	assert(replace != NULL);
+	c = strCount(*stringPtr, search);
+	ns = (char *)malloc(strlen(*stringPtr) - c * strlen(search) +
+			    c * strlen(replace) + 1);
+	l = strlen(search);
+	*ns = 0;
+	pos = *stringPtr;
+	newpos = strstr(pos, search);
+	while (newpos) {
+		strncat(ns, pos, newpos - pos);
+		strcat(ns, replace);
+		pos += newpos - pos + l;
+		newpos = strstr(pos, search);
+	}
+	strcat(ns, pos);
+	free(*stringPtr);
+	*stringPtr = ns;
 }
 
 /**
@@ -552,11 +549,12 @@ void __strReplace(char **stringPtr, char *search, char *replace)
  */
 void strReplaceChar(char *string, char search, char replace)
 {
-    size_t i;
+	size_t i;
 
-    assert(string != NULL);
-    for (i = 0; i < strlen(string); i++)
-        if (string[i] == search) string[i] = replace;
+	assert(string != NULL);
+	for (i = 0; i < strlen(string); i++)
+		if (string[i] == search)
+			string[i] = replace;
 }
 
 /**
@@ -573,19 +571,20 @@ void strReplaceChar(char *string, char search, char replace)
  */
 void __strDelete(char **stringPtr, size_t pos, ssize_t len)
 {
-    char *ns;
+	char *ns;
 
-    assert(stringPtr != NULL);
-    assert(*stringPtr != NULL);
-    assert(pos >= 0 && pos < strlen(*stringPtr));
-    assert(len >= 0);
-    if (len == 0 ) return;
-    ns = strCreate();
-    __strCopySub(&ns, *stringPtr, 0, pos);
-    if ((len >= 0) && ((pos + len) <= strlen(*stringPtr)))
-        __strAppend(&ns, &(*stringPtr)[pos + len]);
-    strFree(*stringPtr);
-    *stringPtr = ns;
+	assert(stringPtr != NULL);
+	assert(*stringPtr != NULL);
+	assert(pos >= 0 && pos < strlen(*stringPtr));
+	assert(len >= 0);
+	if (len == 0)
+		return;
+	ns = strCreate();
+	__strCopySub(&ns, *stringPtr, 0, pos);
+	if ((len >= 0) && ((pos + len) <= strlen(*stringPtr)))
+		__strAppend(&ns, &(*stringPtr)[pos + len]);
+	strFree(*stringPtr);
+	*stringPtr = ns;
 }
 
 /**
@@ -598,16 +597,17 @@ void __strDelete(char **stringPtr, size_t pos, ssize_t len)
  */
 void __strTrimRight(char **stringPtr)
 {
-    char *ns;
-    size_t pos;
+	char *ns;
+	size_t pos;
 
-    assert(stringPtr != NULL);
-    assert(*stringPtr != NULL);
-    ns = strCreate();
-    pos = strFindLastNotOf(*stringPtr, " \t\r\n");
-    if (pos >= 0) __strCopySub(&ns, *stringPtr, 0, pos + 1);
-    strFree(*stringPtr);
-    *stringPtr = ns;
+	assert(stringPtr != NULL);
+	assert(*stringPtr != NULL);
+	ns = strCreate();
+	pos = strFindLastNotOf(*stringPtr, " \t\r\n");
+	if (pos >= 0)
+		__strCopySub(&ns, *stringPtr, 0, pos + 1);
+	strFree(*stringPtr);
+	*stringPtr = ns;
 }
 
 /**
@@ -620,16 +620,17 @@ void __strTrimRight(char **stringPtr)
  */
 void __strTrimLeft(char **stringPtr)
 {
-    char *ns;
-    size_t pos;
+	char *ns;
+	size_t pos;
 
-    assert(stringPtr != NULL);
-    assert(*stringPtr != NULL);
-    ns = strCreate();
-    pos = strFindFirstNotOf(*stringPtr, " \t\r\n");
-    if (pos >= 0) __strCopy(&ns, &(*stringPtr)[pos]);
-    strFree(*stringPtr);
-    *stringPtr = ns;
+	assert(stringPtr != NULL);
+	assert(*stringPtr != NULL);
+	ns = strCreate();
+	pos = strFindFirstNotOf(*stringPtr, " \t\r\n");
+	if (pos >= 0)
+		__strCopy(&ns, &(*stringPtr)[pos]);
+	strFree(*stringPtr);
+	*stringPtr = ns;
 }
 
 /**
@@ -642,21 +643,21 @@ void __strTrimLeft(char **stringPtr)
  */
 void __strTrim(char **stringPtr)
 {
-    char *ns;
-    size_t pos1;
-    size_t pos2;
+	char *ns;
+	size_t pos1;
+	size_t pos2;
 
-    assert(stringPtr != NULL);
-    assert(*stringPtr != NULL);
-    ns = strCreate();
-    pos1 = strFindFirstNotOf(*stringPtr, " \t\r\n");
-    if (pos1 >= 0)
-    {
-        pos2 = strFindLastNotOf(&(*stringPtr)[pos1], " \t\r\n");
-        if (pos2 >= 0) __strCopySub(&ns, &(*stringPtr)[pos1], 0, pos2 + 1);
-    }
-    strFree(*stringPtr);
-    *stringPtr = ns;
+	assert(stringPtr != NULL);
+	assert(*stringPtr != NULL);
+	ns = strCreate();
+	pos1 = strFindFirstNotOf(*stringPtr, " \t\r\n");
+	if (pos1 >= 0) {
+		pos2 = strFindLastNotOf(&(*stringPtr)[pos1], " \t\r\n");
+		if (pos2 >= 0)
+			__strCopySub(&ns, &(*stringPtr)[pos1], 0, pos2 + 1);
+	}
+	strFree(*stringPtr);
+	*stringPtr = ns;
 }
 
 /**
@@ -676,32 +677,34 @@ void __strTrim(char **stringPtr)
  *            the size of the list.
  * @return The splitted strings as a string list.
  */
-char ** strSplit(char *delimiter, char *string, int limit, size_t *size)
+char **strSplit(char *delimiter, char *string, int limit, size_t *size)
 {
-    char *cur, *item;
-    char **list;
-    ssize_t pos;
+	char *cur, *item;
+	char **list;
+	ssize_t pos;
 
-    assert(delimiter != NULL);
-    assert(strlen(delimiter) > 0);
-    assert(string != NULL);
-    listCreate(list, size);
-    if (limit == 0) return list;
-    cur = string;
-    while (limit > 1 || limit < 0)
-    {
-        pos = strFindFirst(cur, delimiter);
-        if (pos == -1) break;
-        item = strCreate();
-        __strCopySub(&item, cur, 0, pos);
-        listAdd(list, item, size);
-        cur = &cur[pos + strlen(delimiter)];
-        if (limit > 0) limit--;
-    }
-    item = strCreate();
-    __strCopy(&item, cur);
-    listAdd(list, item, size);
-    return list;
+	assert(delimiter != NULL);
+	assert(strlen(delimiter) > 0);
+	assert(string != NULL);
+	listCreate(list, size);
+	if (limit == 0)
+		return list;
+	cur = string;
+	while (limit > 1 || limit < 0) {
+		pos = strFindFirst(cur, delimiter);
+		if (pos == -1)
+			break;
+		item = strCreate();
+		__strCopySub(&item, cur, 0, pos);
+		listAdd(list, item, size);
+		cur = &cur[pos + strlen(delimiter)];
+		if (limit > 0)
+			limit--;
+	}
+	item = strCreate();
+	__strCopy(&item, cur);
+	listAdd(list, item, size);
+	return list;
 }
 
 /**
@@ -720,16 +723,16 @@ char ** strSplit(char *delimiter, char *string, int limit, size_t *size)
  */
 char *strJoin(char *glue, char **list, int size)
 {
-    char *string;
-    int i;
+	char *string;
+	int i;
 
-    string = strCreate();
-    for (i = 0; i < size; i++)
-    {
-        if (i) __strAppend(&string, glue);
-        __strAppend(&string, list[i]);
-    }
-    return string;
+	string = strCreate();
+	for (i = 0; i < size; i++) {
+		if (i)
+			__strAppend(&string, glue);
+		__strAppend(&string, list[i]);
+	}
+	return string;
 }
 
 /**
@@ -744,15 +747,16 @@ char *strJoin(char *glue, char **list, int size)
  */
 int strEndsWith(char *string, char *search)
 {
-    int stringLen, searchLen;
+	int stringLen, searchLen;
 
-    assert(string != NULL);
-    assert(search != NULL);
-    stringLen = strlen(string);
-    searchLen = strlen(search);
-    assert(searchLen > 0);
-    if (searchLen > stringLen) return 0;
-    return strcmp(&string[stringLen - searchLen], search) == 0;
+	assert(string != NULL);
+	assert(search != NULL);
+	stringLen = strlen(string);
+	searchLen = strlen(search);
+	assert(searchLen > 0);
+	if (searchLen > stringLen)
+		return 0;
+	return strcmp(&string[stringLen - searchLen], search) == 0;
 }
 
 /**
@@ -766,15 +770,16 @@ int strEndsWith(char *string, char *search)
  */
 int strEndsWithIgnoreCase(char *string, char *search)
 {
-    int stringLen, searchLen;
+	int stringLen, searchLen;
 
-    assert(string != NULL);
-    assert(search != NULL);
-    stringLen = strlen(string);
-    searchLen = strlen(search);
-    assert(searchLen > 0);
-    if (searchLen > stringLen) return 0;
-    return _strcasecmp(&string[stringLen - searchLen], search) == 0;
+	assert(string != NULL);
+	assert(search != NULL);
+	stringLen = strlen(string);
+	searchLen = strlen(search);
+	assert(searchLen > 0);
+	if (searchLen > stringLen)
+		return 0;
+	return _strcasecmp(&string[stringLen - searchLen], search) == 0;
 }
 
 /**
@@ -789,15 +794,16 @@ int strEndsWithIgnoreCase(char *string, char *search)
  */
 int strStartsWith(char *string, char *search)
 {
-    int stringLen, searchLen;
+	int stringLen, searchLen;
 
-    assert(string != NULL);
-    assert(search != NULL);
-    stringLen = strlen(string);
-    searchLen = strlen(search);
-    assert(searchLen > 0);
-    if (searchLen > stringLen) return 0;
-    return strncmp(string, search, searchLen) == 0;
+	assert(string != NULL);
+	assert(search != NULL);
+	stringLen = strlen(string);
+	searchLen = strlen(search);
+	assert(searchLen > 0);
+	if (searchLen > stringLen)
+		return 0;
+	return strncmp(string, search, searchLen) == 0;
 }
 
 /**
@@ -811,13 +817,14 @@ int strStartsWith(char *string, char *search)
  */
 int strStartsWithIgnoreCase(char *string, char *search)
 {
-    int stringLen, searchLen;
+	int stringLen, searchLen;
 
-    assert(string != NULL);
-    assert(search != NULL);
-    stringLen = strlen(string);
-    searchLen = strlen(search);
-    assert(searchLen > 0);
-    if (searchLen > stringLen) return 0;
-    return _strncasecmp(string, search, searchLen) == 0;
+	assert(string != NULL);
+	assert(search != NULL);
+	stringLen = strlen(string);
+	searchLen = strlen(search);
+	assert(searchLen > 0);
+	if (searchLen > stringLen)
+		return 0;
+	return _strncasecmp(string, search, searchLen) == 0;
 }

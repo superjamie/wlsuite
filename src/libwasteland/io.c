@@ -7,7 +7,6 @@
 #include <stdio.h>
 #include "wasteland.h"
 
-
 /**
  * Reads a single bit from the specified file stream. In fact a whole byte
  * is read and stored in <var>dataByte</var>. In <var>dataMask</var> this
@@ -22,21 +21,20 @@
  *            Storage for last bit mask
  * @return The bit (0 or 1) which has been read or -1 if read failed
  */
-  
+
 int wlReadBit(FILE *file, unsigned char *dataByte, unsigned char *dataMask)
 {
-    int tmp;
-    
-    if (*dataMask == 0)
-    {
-        if (fread(dataByte, 1, 1, file) != 1) return -1;
-        *dataMask = 0x80;
-    }
-    tmp = *dataByte & *dataMask;
-    *dataMask = *dataMask >> 1;
-    return tmp ? 1 : 0;
-}
+	int tmp;
 
+	if (*dataMask == 0) {
+		if (fread(dataByte, 1, 1, file) != 1)
+			return -1;
+		*dataMask = 0x80;
+	}
+	tmp = *dataByte & *dataMask;
+	*dataMask = *dataMask >> 1;
+	return tmp ? 1 : 0;
+}
 
 /**
  * Writes a single bit to the specified file stream. In fact a whole byte
@@ -55,22 +53,21 @@ int wlReadBit(FILE *file, unsigned char *dataByte, unsigned char *dataMask)
  *            Storage for last bit mask
  * @return 1 on success, 0 on failure
  */
-  
-int wlWriteBit(char bit, FILE *file, unsigned char *dataByte,
-    unsigned char *dataMask)
-{
-    *dataByte <<= 1;
-    *dataByte |= bit & 1; 
-    *dataMask = *dataMask == 0 ? 1 : (*dataMask << 1);
-    if (*dataMask == 0x80)
-    {
-        if (fputc(*dataByte, file) == EOF) return 0;
-        *dataByte = 0;
-        *dataMask = 0;
-    }
-    return 1;
-}
 
+int wlWriteBit(char bit, FILE *file, unsigned char *dataByte,
+	       unsigned char *dataMask)
+{
+	*dataByte <<= 1;
+	*dataByte |= bit & 1;
+	*dataMask = *dataMask == 0 ? 1 : (*dataMask << 1);
+	if (*dataMask == 0x80) {
+		if (fputc(*dataByte, file) == EOF)
+			return 0;
+		*dataByte = 0;
+		*dataMask = 0;
+	}
+	return 1;
+}
 
 /**
  * Reads a byte from the specified file stream. In fact this function calls
@@ -89,18 +86,17 @@ int wlWriteBit(char bit, FILE *file, unsigned char *dataByte,
 
 int wlReadByte(FILE *file, unsigned char *dataByte, unsigned char *dataMask)
 {
-    int byte, i, bit;
- 
-    byte = 0;
-    for (i = 0 ; i < 8 ; i++)
-    {
-        bit = wlReadBit(file, dataByte, dataMask);
-        if (bit < 0) return bit;
-        byte = (byte << 1) | bit;
-    }
-    return byte;
-}
+	int byte, i, bit;
 
+	byte = 0;
+	for (i = 0; i < 8; i++) {
+		bit = wlReadBit(file, dataByte, dataMask);
+		if (bit < 0)
+			return bit;
+		byte = (byte << 1) | bit;
+	}
+	return byte;
+}
 
 /**
  * Writes a byte to the specified file stream. In fact this function calls
@@ -120,18 +116,17 @@ int wlReadByte(FILE *file, unsigned char *dataByte, unsigned char *dataMask)
  */
 
 int wlWriteByte(unsigned char byte, FILE *file, unsigned char *dataByte,
-    unsigned char *dataMask)
+		unsigned char *dataMask)
 {
-    int i, bit;
- 
-    for (i = 7; i >= 0; i--)
-    {
-        bit = (byte >> i) & 1;
-        if (!wlWriteBit(bit, file, dataByte, dataMask)) return 0;
-    }
-    return 1;
-}
+	int i, bit;
 
+	for (i = 7; i >= 0; i--) {
+		bit = (byte >> i) & 1;
+		if (!wlWriteBit(bit, file, dataByte, dataMask))
+			return 0;
+	}
+	return 1;
+}
 
 /**
  * In case previous bit writes have not filled a whole byte yet this function
@@ -151,16 +146,14 @@ int wlWriteByte(unsigned char byte, FILE *file, unsigned char *dataByte,
  */
 
 int wlFillByte(char bit, FILE *file, unsigned char *dataByte,
-    unsigned char *dataMask)
+	       unsigned char *dataMask)
 {
-    while (*dataMask)
-    {
-        if (!wlWriteBit(bit, file, dataByte, dataMask)) return 0;
-    }
-    return 1;
+	while (*dataMask) {
+		if (!wlWriteBit(bit, file, dataByte, dataMask))
+			return 0;
+	}
+	return 1;
 }
-
-
 
 /**
  * Writes a 32 bit unsigned integer to a stream. Returns 1 on success and 0
@@ -175,9 +168,13 @@ int wlFillByte(char bit, FILE *file, unsigned char *dataByte,
 
 int wlWriteDWord(unsigned int dword, FILE *file)
 {
-    if (fputc(dword & 0xff, file) == EOF) return 0;
-    if (fputc((dword >> 8) & 0xff, file) == EOF) return 0;
-    if (fputc((dword >> 16) & 0xff, file) == EOF) return 0;
-    if (fputc((dword >> 24) & 0xff, file) == EOF) return 0;
-    return 1;
+	if (fputc(dword & 0xff, file) == EOF)
+		return 0;
+	if (fputc((dword >> 8) & 0xff, file) == EOF)
+		return 0;
+	if (fputc((dword >> 16) & 0xff, file) == EOF)
+		return 0;
+	if (fputc((dword >> 24) & 0xff, file) == EOF)
+		return 0;
+	return 1;
 }

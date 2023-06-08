@@ -9,7 +9,7 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <string.h>
-#include "wasteland.h"    
+#include "wasteland.h"
 
 /**
  * Reads cursors from the specified file and returns it as a list of
@@ -38,17 +38,17 @@
 
 wlImages wlCursorsReadFile(char *filename)
 {
-    FILE *file;
-    wlImages cursors;
-    
-    assert(filename != NULL);
-    file = fopen(filename, "rb");
-    if (!file) return NULL;
-    cursors = wlCursorsReadStream(file);
-    fclose(file);
-    return cursors;
-}
+	FILE *file;
+	wlImages cursors;
 
+	assert(filename != NULL);
+	file = fopen(filename, "rb");
+	if (!file)
+		return NULL;
+	cursors = wlCursorsReadStream(file);
+	fclose(file);
+	return cursors;
+}
 
 /**
  * Reads sprites from the specified file stream. The stream must already be
@@ -80,47 +80,54 @@ wlImages wlCursorsReadFile(char *filename)
 
 wlImages wlCursorsReadStream(FILE *stream)
 {
-    wlImages cursors;
-    wlImage image;
-    int cursor, bit, x, y, type, pixel, b;
-    
-    assert(stream != NULL);
-    cursors = wlImagesCreate(8, 16, 16);
-    for (cursor = 0; cursor < cursors->quantity; cursor++)
-    {
-        image = cursors->images[cursor];
-        
-        for (bit = 0; bit < 4; bit++)
-        {
-            for (y = 0; y < image->height; y++)
-            {
-                for (type = 0; type < 2; type++)
-                {
-                    for (x = 8; x >= 0; x -= 8)
-                    {
-                        b = fgetc(stream);
-                        if (b == EOF) return NULL;
-                        for (pixel = 0; pixel < 8; pixel++)
-                        {
-                            if (type)
-                            {
-                                image->pixels[y * image->width + x + pixel] |=
-                                    ((b >> (7 - pixel)) & 1) << bit;
-                            }
-                            else
-                            {
-                                image->pixels[y * image->width + x + pixel] |=
-                                    !((b >> (7 - pixel)) & 1) << (4 + bit);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-    return cursors;
-}
+	wlImages cursors;
+	wlImage image;
+	int cursor, bit, x, y, type, pixel, b;
 
+	assert(stream != NULL);
+	cursors = wlImagesCreate(8, 16, 16);
+	for (cursor = 0; cursor < cursors->quantity; cursor++) {
+		image = cursors->images[cursor];
+
+		for (bit = 0; bit < 4; bit++) {
+			for (y = 0; y < image->height; y++) {
+				for (type = 0; type < 2; type++) {
+					for (x = 8; x >= 0; x -= 8) {
+						b = fgetc(stream);
+						if (b == EOF)
+							return NULL;
+						for (pixel = 0; pixel < 8;
+						     pixel++) {
+							if (type) {
+								image->pixels
+									[y * image->width +
+									 x +
+									 pixel] |=
+									((b >>
+									  (7 -
+									   pixel)) &
+									 1)
+									<< bit;
+							} else {
+								image->pixels
+									[y * image->width +
+									 x +
+									 pixel] |=
+									!((b >>
+									   (7 -
+									    pixel)) &
+									  1)
+									<< (4 +
+									    bit);
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	return cursors;
+}
 
 /**
  * Writes cursors to a file. The function returns 1 if write was successfull
@@ -135,18 +142,18 @@ wlImages wlCursorsReadStream(FILE *stream)
 
 int wlCursorsWriteFile(wlImages cursors, char *filename)
 {
-    FILE *file;
-    int result;
-    
-    assert(cursors != NULL);
-    assert(filename != NULL);
-    file = fopen(filename, "wb");
-    if (!file) return 0;
-    result = wlCursorsWriteStream(cursors, file);
-    fclose(file);
-    return result;
-}
+	FILE *file;
+	int result;
 
+	assert(cursors != NULL);
+	assert(filename != NULL);
+	file = fopen(filename, "wb");
+	if (!file)
+		return 0;
+	result = wlCursorsWriteStream(cursors, file);
+	fclose(file);
+	return result;
+}
 
 /**
  * Writes cursors to a stream. The stream must already be open and pointing
@@ -164,41 +171,47 @@ int wlCursorsWriteFile(wlImages cursors, char *filename)
 
 int wlCursorsWriteStream(wlImages cursors, FILE *stream)
 {
-    int cursor, bit, y, type, x, pixel, b;
-    wlImage image;
- 
-    assert(cursors != NULL);
-    assert(stream != NULL);
-    for (cursor = 0; cursor < cursors->quantity; cursor++)
-    {
-        image = cursors->images[cursor];
-        for (bit = 0; bit < 4; bit++)   
-        {
-            for (y = 0; y < image->height; y++)
-            {
-                for (type = 0; type < 2; type++)
-                {
-                    for (x = 8; x >= 0; x -= 8)
-                    {
-                        b = 0;
-                        for (pixel = 0; pixel < 8; pixel++)
-                        {
-                            if (type)
-                            {
-                                b |= ((image->pixels[y * image->width + x
-                                    + pixel] >> bit) & 0x01) << (7 - pixel);
-                            }
-                            else
-                            {
-                                b |= !((image->pixels[y * image->width + x
-                                    + pixel] >> (4 + bit)) & 0x01) << (7 - pixel);
-                            }
-                        }
-                        if (fputc(b, stream) == EOF) return 0;
-                    }
-                }
-            }
-        }
-    }
-    return 1;
+	int cursor, bit, y, type, x, pixel, b;
+	wlImage image;
+
+	assert(cursors != NULL);
+	assert(stream != NULL);
+	for (cursor = 0; cursor < cursors->quantity; cursor++) {
+		image = cursors->images[cursor];
+		for (bit = 0; bit < 4; bit++) {
+			for (y = 0; y < image->height; y++) {
+				for (type = 0; type < 2; type++) {
+					for (x = 8; x >= 0; x -= 8) {
+						b = 0;
+						for (pixel = 0; pixel < 8;
+						     pixel++) {
+							if (type) {
+								b |= ((image->pixels
+									       [y * image->width +
+										x +
+										pixel] >>
+								       bit) &
+								      0x01)
+								     << (7 -
+									 pixel);
+							} else {
+								b |= !((image->pixels
+										[y * image->width +
+										 x +
+										 pixel] >>
+									(4 +
+									 bit)) &
+								       0x01)
+								     << (7 -
+									 pixel);
+							}
+						}
+						if (fputc(b, stream) == EOF)
+							return 0;
+					}
+				}
+			}
+		}
+	}
+	return 1;
 }

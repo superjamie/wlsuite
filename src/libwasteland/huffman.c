@@ -9,7 +9,6 @@
 #include <string.h>
 #include "wasteland.h"
 
-
 /**
  * Reads a huffman tree node (and all it's sub nodes) from the specified stream.
  * You have to provide pointers to 0-initialized dataByte/dataMask storage
@@ -26,34 +25,36 @@
  * @return The read huffman tree node with all its sub nodes
  */
 
-wlHuffmanNode * wlHuffmanReadNode(FILE *file, unsigned char *dataByte,
-        unsigned char *dataMask)
+wlHuffmanNode *wlHuffmanReadNode(FILE *file, unsigned char *dataByte,
+				 unsigned char *dataMask)
 {
-    wlHuffmanNode *node, *left, *right;
-    int bit, payload;
+	wlHuffmanNode *node, *left, *right;
+	int bit, payload;
 
-    // Read payload or sub nodes.
-    if ((bit = wlReadBit(file, dataByte, dataMask)) == -1) return NULL;
-    if (bit)
-    {
-        left = NULL;
-        right = NULL;
-        if ((payload = wlReadByte(file, dataByte, dataMask)) == -1) return NULL;
-    }
-    else
-    {
-        if (!(left = wlHuffmanReadNode(file, dataByte, dataMask))) return NULL;
-        if (wlReadBit(file, dataByte, dataMask) == -1) return NULL;
-        if (!(right = wlHuffmanReadNode(file, dataByte, dataMask))) return NULL;
-        payload = 0;
-    }
+	// Read payload or sub nodes.
+	if ((bit = wlReadBit(file, dataByte, dataMask)) == -1)
+		return NULL;
+	if (bit) {
+		left = NULL;
+		right = NULL;
+		if ((payload = wlReadByte(file, dataByte, dataMask)) == -1)
+			return NULL;
+	} else {
+		if (!(left = wlHuffmanReadNode(file, dataByte, dataMask)))
+			return NULL;
+		if (wlReadBit(file, dataByte, dataMask) == -1)
+			return NULL;
+		if (!(right = wlHuffmanReadNode(file, dataByte, dataMask)))
+			return NULL;
+		payload = 0;
+	}
 
-    // Build and return the node
-    node = (wlHuffmanNode *) malloc(sizeof(wlHuffmanNode));
-    node->left = left;
-    node->right = right;
-    node->payload = payload;
-    return node;
+	// Build and return the node
+	node = (wlHuffmanNode *)malloc(sizeof(wlHuffmanNode));
+	node->left = left;
+	node->right = right;
+	node->payload = payload;
+	return node;
 }
 
 /**
@@ -74,25 +75,26 @@ wlHuffmanNode * wlHuffmanReadNode(FILE *file, unsigned char *dataByte,
  */
 
 int wlHuffmanWriteNode(wlHuffmanNode *node, FILE *stream,
-    unsigned char *dataByte, unsigned char *dataMask)
+		       unsigned char *dataByte, unsigned char *dataMask)
 {
-    if (node->left && node->right)
-    {
-        if (!wlWriteBit(0, stream, dataByte, dataMask)) return 0;
-        if (!wlHuffmanWriteNode(node->left, stream, dataByte, dataMask))
-            return 0;
-        if (!wlWriteBit(0, stream, dataByte, dataMask)) return 0;
-        if (!wlHuffmanWriteNode(node->right, stream, dataByte, dataMask))
-            return 0;
-    }
-    else
-    {
-        if (!wlWriteBit(1, stream, dataByte, dataMask)) return 0;
-        if (!wlWriteByte(node->payload, stream, dataByte, dataMask)) return 0;
-    }
-    return 1;
+	if (node->left && node->right) {
+		if (!wlWriteBit(0, stream, dataByte, dataMask))
+			return 0;
+		if (!wlHuffmanWriteNode(node->left, stream, dataByte, dataMask))
+			return 0;
+		if (!wlWriteBit(0, stream, dataByte, dataMask))
+			return 0;
+		if (!wlHuffmanWriteNode(node->right, stream, dataByte,
+					dataMask))
+			return 0;
+	} else {
+		if (!wlWriteBit(1, stream, dataByte, dataMask))
+			return 0;
+		if (!wlWriteByte(node->payload, stream, dataByte, dataMask))
+			return 0;
+	}
+	return 1;
 }
-
 
 /**
  * Releases the allocated memory for the specified huffman tree node.
@@ -103,11 +105,12 @@ int wlHuffmanWriteNode(wlHuffmanNode *node, FILE *stream,
 
 void wlHuffmanFreeNode(wlHuffmanNode *node)
 {
-    if (node->left != NULL) wlHuffmanFreeNode(node->left);
-    if (node->right != NULL) wlHuffmanFreeNode(node->right);
-    free(node);
+	if (node->left != NULL)
+		wlHuffmanFreeNode(node->left);
+	if (node->right != NULL)
+		wlHuffmanFreeNode(node->right);
+	free(node);
 }
-
 
 /**
  * Reads a byte from the huffman encoded stream. You have to provide pointers
@@ -126,21 +129,20 @@ void wlHuffmanFreeNode(wlHuffmanNode *node)
  */
 
 int wlHuffmanReadByte(FILE *file, wlHuffmanNode *rootNode,
-        unsigned char *dataByte, unsigned char *dataMask)
+		      unsigned char *dataByte, unsigned char *dataMask)
 {
-    int bit;
-    wlHuffmanNode *node;
+	int bit;
+	wlHuffmanNode *node;
 
-    node = rootNode;
-    while (node->left != NULL)
-    {
-        bit = wlReadBit(file, dataByte, dataMask);
-        if (bit < 0) return -1;
-        node = bit ? node->right : node->left;
-    }
-    return node->payload;
+	node = rootNode;
+	while (node->left != NULL) {
+		bit = wlReadBit(file, dataByte, dataMask);
+		if (bit < 0)
+			return -1;
+		node = bit ? node->right : node->left;
+	}
+	return node->payload;
 }
-
 
 /**
  * Writes a byte to the huffman encoded stream. You have to provide pointers
@@ -161,21 +163,20 @@ int wlHuffmanReadByte(FILE *file, wlHuffmanNode *rootNode,
  */
 
 int wlHuffmanWriteByte(unsigned char byte, FILE *file,
-    wlHuffmanNode **nodeIndex, unsigned char *dataByte,
-    unsigned char *dataMask)
+		       wlHuffmanNode **nodeIndex, unsigned char *dataByte,
+		       unsigned char *dataMask)
 {
-    wlHuffmanNode *node;
-    int i, bit;
+	wlHuffmanNode *node;
+	int i, bit;
 
-    node = nodeIndex[byte];
-    for (i = node->keyBits - 1; i >= 0; i--)
-    {
-        bit = (node->key >> i) & 1;
-        if (!wlWriteBit(bit, file, dataByte, dataMask)) return 0;
-    }
-    return 1;
+	node = nodeIndex[byte];
+	for (i = node->keyBits - 1; i >= 0; i--) {
+		bit = (node->key >> i) & 1;
+		if (!wlWriteBit(bit, file, dataByte, dataMask))
+			return 0;
+	}
+	return 1;
 }
-
 
 /**
  * Reads a 16 bit little-endian value from the specified huffman stream.
@@ -193,17 +194,18 @@ int wlHuffmanWriteByte(unsigned char byte, FILE *file,
  */
 
 int wlHuffmanReadWord(FILE *stream, wlHuffmanNode *rootNode,
-        unsigned char *dataByte, unsigned char *dataMask)
+		      unsigned char *dataByte, unsigned char *dataMask)
 {
-    int low, high;
+	int low, high;
 
-    low = wlHuffmanReadByte(stream, rootNode, dataByte, dataMask);
-    if (low == -1) return -1;
-    high = wlHuffmanReadByte(stream, rootNode, dataByte, dataMask);
-    if (high == -1) return -1;
-    return high << 8 | low;
+	low = wlHuffmanReadByte(stream, rootNode, dataByte, dataMask);
+	if (low == -1)
+		return -1;
+	high = wlHuffmanReadByte(stream, rootNode, dataByte, dataMask);
+	if (high == -1)
+		return -1;
+	return high << 8 | low;
 }
-
 
 /**
  * Reads the specified number of bytes and returns them. If <var>block</var>
@@ -228,21 +230,23 @@ int wlHuffmanReadWord(FILE *stream, wlHuffmanNode *rootNode,
  * @return The 16 bit litt-endian value or -1 if an error occured while reading
  */
 
-unsigned char * wlHuffmanReadBlock(FILE *stream, unsigned char *block, int size,
-    wlHuffmanNode *rootNode, unsigned char *dataByte, unsigned char *dataMask)
+unsigned char *wlHuffmanReadBlock(FILE *stream, unsigned char *block, int size,
+				  wlHuffmanNode *rootNode,
+				  unsigned char *dataByte,
+				  unsigned char *dataMask)
 {
-    int i, byte;
+	int i, byte;
 
-    if (!block) block = (unsigned char *) malloc(sizeof(unsigned char) * size);
-    for (i = 0; i < size; i++)
-    {
-        byte = wlHuffmanReadByte(stream, rootNode, dataByte, dataMask);
-        if (byte == -1) return NULL;
-        block[i] = byte;
-    }
-    return block;
+	if (!block)
+		block = (unsigned char *)malloc(sizeof(unsigned char) * size);
+	for (i = 0; i < size; i++) {
+		byte = wlHuffmanReadByte(stream, rootNode, dataByte, dataMask);
+		if (byte == -1)
+			return NULL;
+		block[i] = byte;
+	}
+	return block;
 }
-
 
 /**
  * Writes a 16 bit little-endian value to the specified huffman stream.
@@ -261,22 +265,20 @@ unsigned char * wlHuffmanReadBlock(FILE *stream, unsigned char *block, int size,
  * @return 1 on success, 0 on failure
  */
 
-int wlHuffmanWriteWord(u_int16_t word, FILE *stream,
-    wlHuffmanNode **nodeIndex, unsigned char *dataByte,
-    unsigned char *dataMask)
+int wlHuffmanWriteWord(u_int16_t word, FILE *stream, wlHuffmanNode **nodeIndex,
+		       unsigned char *dataByte, unsigned char *dataMask)
 {
-    int low, high;
+	int low, high;
 
-    low = word & 0xff;
-    high = word >> 8;
+	low = word & 0xff;
+	high = word >> 8;
 
-    if (!wlHuffmanWriteByte(low, stream, nodeIndex, dataByte, dataMask))
-        return 0;
-    if (!wlHuffmanWriteByte(high, stream, nodeIndex, dataByte, dataMask))
-        return 0;
-    return 1;
+	if (!wlHuffmanWriteByte(low, stream, nodeIndex, dataByte, dataMask))
+		return 0;
+	if (!wlHuffmanWriteByte(high, stream, nodeIndex, dataByte, dataMask))
+		return 0;
+	return 1;
 }
-
 
 /**
  * Used for sorting the huffman nodes by usage
@@ -290,18 +292,22 @@ int wlHuffmanWriteWord(u_int16_t word, FILE *stream,
 
 static int compareNode(const void *a, const void *b)
 {
-    wlHuffmanNode *node1, *node2;
+	wlHuffmanNode *node1, *node2;
 
-    node1 = *((wlHuffmanNode **) a);
-    node2 = *((wlHuffmanNode **) b);
-    if (!node1 && !node2) return 0;
-    if (!node1) return 1;
-    if (!node2) return -1;
-    if (node1->usage == node2->usage) return 0;
-    if (node1->usage > node2->usage) return -1;
-    return 1;
+	node1 = *((wlHuffmanNode **)a);
+	node2 = *((wlHuffmanNode **)b);
+	if (!node1 && !node2)
+		return 0;
+	if (!node1)
+		return 1;
+	if (!node2)
+		return -1;
+	if (node1->usage == node2->usage)
+		return 0;
+	if (node1->usage > node2->usage)
+		return -1;
+	return 1;
 }
-
 
 /**
  * Builds the keys for the specified node and all it's subnodes.
@@ -316,23 +322,23 @@ static int compareNode(const void *a, const void *b)
 
 static void buildKeys(wlHuffmanNode *node, int key, int keyBits)
 {
-    // Special case (only one node is present)
-    if (!keyBits && !node->left && !node->right)
-    {
-        node->key = 0;
-        node->keyBits = 1;
-        return;
-    }
+	// Special case (only one node is present)
+	if (!keyBits && !node->left && !node->right) {
+		node->key = 0;
+		node->keyBits = 1;
+		return;
+	}
 
-    // Store key
-    node->key = key;
-    node->keyBits = keyBits;
+	// Store key
+	node->key = key;
+	node->keyBits = keyBits;
 
-    // Dive into sub nodes
-    if (node->left) buildKeys(node->left, key << 1, keyBits + 1);
-    if (node->right) buildKeys(node->right, (key << 1) | 1, keyBits + 1);
+	// Dive into sub nodes
+	if (node->left)
+		buildKeys(node->left, key << 1, keyBits + 1);
+	if (node->right)
+		buildKeys(node->right, (key << 1) | 1, keyBits + 1);
 }
-
 
 /**
  * Dumps the specified huffman node to stdout. This is just for debugging
@@ -347,35 +353,31 @@ static void buildKeys(wlHuffmanNode *node, int key, int keyBits)
 
 void wlHuffmanDumpNode(wlHuffmanNode *node, int indent)
 {
-    char *spaces;
-    int i;
+	char *spaces;
+	int i;
 
-    spaces = (char *) malloc(indent + 1);
-    for (i = 0; i < indent; i++) spaces[i] = ' ';
-    spaces[i] = 0;
-    if (node->left && node->right)
-    {
-        printf("%sLeft:\n", spaces);
-        wlHuffmanDumpNode(node->left, indent + 1);
-        printf("%sRight:\n", spaces);
-        wlHuffmanDumpNode(node->right, indent + 1);
-    }
-    else
-    {
-        printf("%s", spaces);
-        if (node->keyBits <= 0 || node->keyBits > 16)
-        {
-            printf("Invalid keybits on payload node!!!!");
-            exit(1);
-        }
-        for (i = node->keyBits - 1; i >= 0; i--)
-        {
-            printf("%i", (node->key >> i) & 1);
-        }
-        printf(" = ");
-        printf("%i (Usage: %i)\n", node->payload, node->usage);
-    }
-    free(spaces);
+	spaces = (char *)malloc(indent + 1);
+	for (i = 0; i < indent; i++)
+		spaces[i] = ' ';
+	spaces[i] = 0;
+	if (node->left && node->right) {
+		printf("%sLeft:\n", spaces);
+		wlHuffmanDumpNode(node->left, indent + 1);
+		printf("%sRight:\n", spaces);
+		wlHuffmanDumpNode(node->right, indent + 1);
+	} else {
+		printf("%s", spaces);
+		if (node->keyBits <= 0 || node->keyBits > 16) {
+			printf("Invalid keybits on payload node!!!!");
+			exit(1);
+		}
+		for (i = node->keyBits - 1; i >= 0; i--) {
+			printf("%i", (node->key >> i) & 1);
+		}
+		printf(" = ");
+		printf("%i (Usage: %i)\n", node->payload, node->usage);
+	}
+	free(spaces);
 }
 
 /**
@@ -396,80 +398,75 @@ void wlHuffmanDumpNode(wlHuffmanNode *node, int indent)
  * @return The root node of the huffman tree
  */
 
-wlHuffmanNode * wlHuffmanBuildTree(unsigned char *data, int size,
-    wlHuffmanNode ***nodeIndex)
+wlHuffmanNode *wlHuffmanBuildTree(unsigned char *data, int size,
+				  wlHuffmanNode ***nodeIndex)
 {
-    wlHuffmanNode **nodes, *node, *left, *right;
-    int i;
-    unsigned char payload;
+	wlHuffmanNode **nodes, *node, *left, *right;
+	int i;
+	unsigned char payload;
 
-    // Initialize the list of huffman nodes
-    nodes = (wlHuffmanNode **) malloc(sizeof(wlHuffmanNode *) * 256);
-    memset(nodes, 0, sizeof(wlHuffmanNode *) * 256);
+	// Initialize the list of huffman nodes
+	nodes = (wlHuffmanNode **)malloc(sizeof(wlHuffmanNode *) * 256);
+	memset(nodes, 0, sizeof(wlHuffmanNode *) * 256);
 
-    // Cycle through data and create huffman nodes for every used data byte
-    // and count the usage
-    node = NULL;
-    for (i = 0; i < size; i++)
-    {
-        payload = data[i];
-        node = nodes[payload];
-        if (!node)
-        {
-            node = (wlHuffmanNode *) malloc(sizeof(wlHuffmanNode));
-            node->parent = NULL;
-            node->left = NULL;
-            node->right = NULL;
-            node->payload = payload;
-            node->usage = 1;
-            node->key = 0;
-            node->keyBits = 0;
-            nodes[payload] = node;
-        }
-        else
-        {
-            node->usage++;
-        }
-    }
+	// Cycle through data and create huffman nodes for every used data byte
+	// and count the usage
+	node = NULL;
+	for (i = 0; i < size; i++) {
+		payload = data[i];
+		node = nodes[payload];
+		if (!node) {
+			node = (wlHuffmanNode *)malloc(sizeof(wlHuffmanNode));
+			node->parent = NULL;
+			node->left = NULL;
+			node->right = NULL;
+			node->payload = payload;
+			node->usage = 1;
+			node->key = 0;
+			node->keyBits = 0;
+			nodes[payload] = node;
+		} else {
+			node->usage++;
+		}
+	}
 
-    // Save current state of the list as node index
-    *nodeIndex = (wlHuffmanNode **) malloc(sizeof(wlHuffmanNode *) * 256);
-    memcpy(*nodeIndex, nodes, sizeof(wlHuffmanNode *) * 256);
+	// Save current state of the list as node index
+	*nodeIndex = (wlHuffmanNode **)malloc(sizeof(wlHuffmanNode *) * 256);
+	memcpy(*nodeIndex, nodes, sizeof(wlHuffmanNode *) * 256);
 
-    // Now sort the list by usage
-    qsort(nodes, 256, sizeof(wlHuffmanNode *), compareNode);
+	// Now sort the list by usage
+	qsort(nodes, 256, sizeof(wlHuffmanNode *), compareNode);
 
-    // Convert the list into a tree
-    for (i = 254; i >= 0; i--)
-    {
-        // Read last two nodes
-        right = nodes[i];
-        left = nodes[i + 1];
-        if (!left || !right) continue;
+	// Convert the list into a tree
+	for (i = 254; i >= 0; i--) {
+		// Read last two nodes
+		right = nodes[i];
+		left = nodes[i + 1];
+		if (!left || !right)
+			continue;
 
-        // Create a parent node for the two nodes
-        node = (wlHuffmanNode *) malloc(sizeof(wlHuffmanNode));
-        node->payload = 0;
-        node->left = left;
-        node->right = right;
-        node->parent = NULL,
-        left->parent = node;
-        right->parent = node;
-        node->usage = left->usage + right->usage;
-        node->key = 0;
-        node->keyBits = 0;
+		// Create a parent node for the two nodes
+		node = (wlHuffmanNode *)malloc(sizeof(wlHuffmanNode));
+		node->payload = 0;
+		node->left = left;
+		node->right = right;
+		node->parent = NULL, left->parent = node;
+		right->parent = node;
+		node->usage = left->usage + right->usage;
+		node->key = 0;
+		node->keyBits = 0;
 
-        // Remove the two nodes and put the new parent node at the end of the
-        // list
-        nodes[i + 1] = NULL;
-        nodes[i] = node;
-        qsort(nodes, 256, sizeof(wlHuffmanNode *), compareNode);
-    }
+		// Remove the two nodes and put the new parent node at the end of the
+		// list
+		nodes[i + 1] = NULL;
+		nodes[i] = node;
+		qsort(nodes, 256, sizeof(wlHuffmanNode *), compareNode);
+	}
 
-    // Build the node keys
-    buildKeys(node, 0, 0);
+	// Build the node keys
+	buildKeys(node, 0, 0);
 
-    // Free the list and return the root node of the tree
-    free(nodes);
-    return node;
+	// Free the list and return the root node of the tree
+	free(nodes);
+	return node;
 }

@@ -37,7 +37,8 @@
  * @param len
  *            The length of the sub string.
  */
-#define strAppendSub(dest, src, index, len) __strAppendSub(&dest, src, index, len);
+#define strAppendSub(dest, src, index, len) \
+	__strAppendSub(&dest, src, index, len);
 
 /**
  * Copies the characters from src to dest.
@@ -74,7 +75,8 @@
  * @param replace
  *            The string to replace occurences of <var>search</var> with.
  */
-#define strReplace(string, search, replace) __strReplace(&string, search, replace)
+#define strReplace(string, search, replace) \
+	__strReplace(&string, search, replace)
 
 /**
  * Deletes <var>len</var> characters at position <var>pos</var> from
@@ -116,16 +118,16 @@
  */
 #define strTrim(string) __strTrim(&string);
 
-char *  strCreate();
-char *  strDup();
-void    strFree(char *string);
-size_t  strLength(char *string);
-int     strEqualsIgnoreCase(char *string1, char *string2);
-int     strEquals(char *string1, char *string2);
-void    __strCopy(char **destPtr, char *src);
-void    __strCopySub(char **destPtr, char *src, size_t index, size_t len);
-void    __strAppend(char **destPtr, char *src);
-void    __strAppendSub(char **destPtr, char *src, size_t index, size_t len);
+char *strCreate();
+char *strDup();
+void strFree(char *string);
+size_t strLength(char *string);
+int strEqualsIgnoreCase(char *string1, char *string2);
+int strEquals(char *string1, char *string2);
+void __strCopy(char **destPtr, char *src);
+void __strCopySub(char **destPtr, char *src, size_t index, size_t len);
+void __strAppend(char **destPtr, char *src);
+void __strAppendSub(char **destPtr, char *src, size_t index, size_t len);
 ssize_t strFindFirst(char *string, char *search);
 ssize_t strFindLast(char *string, char *search);
 ssize_t strFindFirstChar(char *string, char search);
@@ -134,19 +136,19 @@ ssize_t strFindFirstOf(char *string, char *search);
 ssize_t strFindFirstNotOf(char *string, char *search);
 ssize_t strFindLastOf(char *string, char *search);
 ssize_t strFindLastNotOf(char *string, char *search);
-int     strCount(char *string, char *search);
-int     strCountChar(char *string, char search);
-void    __strReplace(char **stringPtr, char *search, char *replace);
-void    strReplaceChar(char *string, char search, char replace);
-void    __strDelete(char **stringPtr, size_t pos, ssize_t len);
-void    __strTrimRight(char **stringPtr);
-void    __strTrimLeft(char **stringPtr);
-void    __strTrim(char **stringPtr);
-char ** strSplit(char *delimiter, char *string, int limit, size_t *size);
-char *  strJoin(char *glue, char **list, int size);
-int     strEndsWith(char *string, char *search);
-int     strEndsWithIgnoreCase(char *string, char *search);
-int     strStartsWith(char *string, char *search);
-int     strStartsWithIgnoreCase(char *string, char *search);
+int strCount(char *string, char *search);
+int strCountChar(char *string, char search);
+void __strReplace(char **stringPtr, char *search, char *replace);
+void strReplaceChar(char *string, char search, char replace);
+void __strDelete(char **stringPtr, size_t pos, ssize_t len);
+void __strTrimRight(char **stringPtr);
+void __strTrimLeft(char **stringPtr);
+void __strTrim(char **stringPtr);
+char **strSplit(char *delimiter, char *string, int limit, size_t *size);
+char *strJoin(char *glue, char **list, int size);
+int strEndsWith(char *string, char *search);
+int strEndsWithIgnoreCase(char *string, char *search);
+int strStartsWith(char *string, char *search);
+int strStartsWithIgnoreCase(char *string, char *search);
 
 #endif

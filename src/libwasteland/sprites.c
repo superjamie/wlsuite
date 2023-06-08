@@ -9,8 +9,7 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <string.h>
-#include "wasteland.h"    
-
+#include "wasteland.h"
 
 /**
  * Reads sprites from the specified files and returns it as a an array of
@@ -33,25 +32,24 @@
 
 wlImages wlSpritesReadFile(char *spritesFilename, char *masksFilename)
 {
-    FILE *spritesFile, *masksFile;
-    wlImages sprites;
-    
-    assert(spritesFilename != NULL);
-    assert(masksFilename != NULL);
-    spritesFile = fopen(spritesFilename, "rb");
-    if (!spritesFile) return NULL;
-    masksFile = fopen(masksFilename, "rb");
-    if (!masksFile)
-    {
-        fclose(spritesFile);
-        return NULL;
-    }
-    sprites = wlSpritesReadStream(spritesFile, masksFile);
-    fclose(spritesFile);
-    fclose(masksFile);
-    return sprites;
-}
+	FILE *spritesFile, *masksFile;
+	wlImages sprites;
 
+	assert(spritesFilename != NULL);
+	assert(masksFilename != NULL);
+	spritesFile = fopen(spritesFilename, "rb");
+	if (!spritesFile)
+		return NULL;
+	masksFile = fopen(masksFilename, "rb");
+	if (!masksFile) {
+		fclose(spritesFile);
+		return NULL;
+	}
+	sprites = wlSpritesReadStream(spritesFile, masksFile);
+	fclose(spritesFile);
+	fclose(masksFile);
+	return sprites;
+}
 
 /**
  * Reads sprites from the specified file streams. The streams must already be
@@ -77,49 +75,51 @@ wlImages wlSpritesReadFile(char *spritesFilename, char *masksFilename)
 
 wlImages wlSpritesReadStream(FILE *spritesStream, FILE *masksStream)
 {
-    wlImages sprites;
-    wlImage image;
-    int x, y, bit, pixel, sprite;
-    int b;
-    
-    assert(spritesStream != NULL);
-    assert(masksStream != NULL);
-    sprites = wlImagesCreate(10, 16, 16);
-    for (sprite = 0; sprite < sprites->quantity; sprite++)
-    {        
-        image = sprites->images[sprite];
-        for (bit = 0; bit < 4; bit++)
-        {
-            for (y = 0; y < image->height; y++)
-            {
-                for (x = 0; x < image->width; x+= 8)
-                {
-                    b = fgetc(spritesStream);
-                    if (b == EOF) return NULL;
-                    for (pixel = 0; pixel < 8; pixel++)
-                    {
-                        image->pixels[y * image->width + x + pixel] |=
-                            ((b >> (7 - pixel)) & 1) << bit;
-                    }
+	wlImages sprites;
+	wlImage image;
+	int x, y, bit, pixel, sprite;
+	int b;
 
-                    // Read transparancy information when last bit has been read
-                    if (bit == 3)
-                    {
-                        b = fgetc(masksStream);
-                        if (b == EOF) return NULL;
-                        for (pixel = 0; pixel < 8; pixel++)
-                        {
-                            image->pixels[y * image->width + x + pixel] |=
-                                ((b >> (7 - pixel)) & 0x01) << 4;
-                        }
-                    }
-                }
-            }            
-        }
-    }
-    return sprites;
+	assert(spritesStream != NULL);
+	assert(masksStream != NULL);
+	sprites = wlImagesCreate(10, 16, 16);
+	for (sprite = 0; sprite < sprites->quantity; sprite++) {
+		image = sprites->images[sprite];
+		for (bit = 0; bit < 4; bit++) {
+			for (y = 0; y < image->height; y++) {
+				for (x = 0; x < image->width; x += 8) {
+					b = fgetc(spritesStream);
+					if (b == EOF)
+						return NULL;
+					for (pixel = 0; pixel < 8; pixel++) {
+						image->pixels[y * image->width +
+							      x + pixel] |=
+							((b >> (7 - pixel)) & 1)
+							<< bit;
+					}
+
+					// Read transparancy information when last bit has been read
+					if (bit == 3) {
+						b = fgetc(masksStream);
+						if (b == EOF)
+							return NULL;
+						for (pixel = 0; pixel < 8;
+						     pixel++) {
+							image->pixels
+								[y * image->width +
+								 x + pixel] |=
+								((b >>
+								  (7 - pixel)) &
+								 0x01)
+								<< 4;
+						}
+					}
+				}
+			}
+		}
+	}
+	return sprites;
 }
-
 
 /**
  * Writes sprites to files. The function returns 1 if write was successfull
@@ -135,28 +135,27 @@ wlImages wlSpritesReadStream(FILE *spritesStream, FILE *masksStream)
  */
 
 int wlSpritesWriteFile(wlImages sprites, char *spritesFilename,
-        char *masksFilename)
+		       char *masksFilename)
 {
-    FILE *spritesFile, *masksFile;
-    int result;
-    
-    assert(sprites != NULL);
-    assert(spritesFilename != NULL);
-    assert(masksFilename != NULL);
-    spritesFile = fopen(spritesFilename, "wb");
-    if (!spritesFile) return 0;
-    masksFile = fopen(masksFilename, "wb");
-    if (!masksFile)
-    {
-        fclose(spritesFile);
-        return 0;
-    }
-    result = wlSpritesWriteStream(sprites, spritesFile, masksFile);
-    fclose(spritesFile);
-    fclose(masksFile);
-    return result;
-}
+	FILE *spritesFile, *masksFile;
+	int result;
 
+	assert(sprites != NULL);
+	assert(spritesFilename != NULL);
+	assert(masksFilename != NULL);
+	spritesFile = fopen(spritesFilename, "wb");
+	if (!spritesFile)
+		return 0;
+	masksFile = fopen(masksFilename, "wb");
+	if (!masksFile) {
+		fclose(spritesFile);
+		return 0;
+	}
+	result = wlSpritesWriteStream(sprites, spritesFile, masksFile);
+	fclose(spritesFile);
+	fclose(masksFile);
+	return result;
+}
 
 /**
  * Writes sprites to streams. The streams must already be open and pointing
@@ -175,47 +174,52 @@ int wlSpritesWriteFile(wlImages sprites, char *spritesFilename,
  */
 
 int wlSpritesWriteStream(wlImages sprites, FILE *spritesStream,
-        FILE *masksStream)
+			 FILE *masksStream)
 {
-    int x, y, bit, sprite, b;
-    int pixel;
-    wlImage image;
+	int x, y, bit, sprite, b;
+	int pixel;
+	wlImage image;
 
-    assert(sprites != NULL);
-    assert(spritesStream != NULL);
-    assert(masksStream != NULL);
-    for (sprite = 0; sprite < sprites->quantity; sprite++)
-    {
-        image = sprites->images[sprite];
-        for (bit = 0; bit < 4; bit++)
-        {
-            for (y = 0; y < image->height; y++)
-            {
-                for (x = 0; x < image->width; x += 8)
-                {
-                    b = 0;
-                    for (pixel = 0; pixel < 8; pixel++)
-                    {
-                        b |= ((image->pixels[y * image->width +
-                            x + pixel] >> bit) & 0x01) << (7 - pixel);
-                    }
-                    if (fputc(b, spritesStream) == EOF) return 0;
-                    
-                    // Write transparancy information when last bit has been
-                    // written
-                    if (bit == 3)
-                    {
-                        b = 0;
-                        for (pixel = 0; pixel < 8; pixel++)
-                        {
-                            b |= (image->pixels[y * image->width + x + pixel] 
-                                                >> 4) << (7 - pixel);
-                        }
-                        if (fputc(b, masksStream) == EOF) return 0;
-                    }
-                }
-            }
-        }
-    }
-    return 1;
+	assert(sprites != NULL);
+	assert(spritesStream != NULL);
+	assert(masksStream != NULL);
+	for (sprite = 0; sprite < sprites->quantity; sprite++) {
+		image = sprites->images[sprite];
+		for (bit = 0; bit < 4; bit++) {
+			for (y = 0; y < image->height; y++) {
+				for (x = 0; x < image->width; x += 8) {
+					b = 0;
+					for (pixel = 0; pixel < 8; pixel++) {
+						b |= ((image->pixels
+							       [y * image->width +
+								x + pixel] >>
+						       bit) &
+						      0x01)
+						     << (7 - pixel);
+					}
+					if (fputc(b, spritesStream) == EOF)
+						return 0;
+
+					// Write transparancy information when last bit has been
+					// written
+					if (bit == 3) {
+						b = 0;
+						for (pixel = 0; pixel < 8;
+						     pixel++) {
+							b |= (image->pixels
+								      [y * image->width +
+								       x +
+								       pixel] >>
+							      4)
+							     << (7 - pixel);
+						}
+						if (fputc(b, masksStream) ==
+						    EOF)
+							return 0;
+					}
+				}
+			}
+		}
+	}
+	return 1;
 }

@@ -10,7 +10,6 @@
 #include <errno.h>
 #include <string.h>
 #include "wasteland.h"
-    
 
 /**
  * Creates a new image list with the specified number of images and the
@@ -30,20 +29,18 @@ wlImages wlImagesCreate(int quantity, int width, int height)
 {
 	wlImages images;
 	int i;
-	
+
 	assert(quantity > 0);
 	assert(width > 0);
 	assert(height > 0);
-	images = (wlImages) malloc(sizeof(wlImagesStruct));
+	images = (wlImages)malloc(sizeof(wlImagesStruct));
 	images->quantity = quantity;
-    images->images = (wlImage *) malloc(sizeof(wlImage) * quantity);
-	for (i = 0; i < quantity; i++)
-	{
-	    images->images[i] = wlImageCreate(width, height);
+	images->images = (wlImage *)malloc(sizeof(wlImage) * quantity);
+	for (i = 0; i < quantity; i++) {
+		images->images[i] = wlImageCreate(width, height);
 	}
 	return images;
 }
-
 
 /**
  * Releases all the memory allocated for the specified image list.
@@ -54,12 +51,11 @@ wlImages wlImagesCreate(int quantity, int width, int height)
 
 void wlImagesFree(wlImages images)
 {
-    int i;
-    
-    assert(images != NULL);
-    for (i = 0; i < images->quantity; i++)
-    {
-        wlImageFree(images->images[i]);
-    }
-    free(images);
+	int i;
+
+	assert(images != NULL);
+	for (i = 0; i < images->quantity; i++) {
+		wlImageFree(images->images[i]);
+	}
+	free(images);
 }

@@ -12,7 +12,6 @@
 #include "../common/list.h"
 #include "wasteland.h"
 
-
 /**
  * Reads all tilesets from the specified file and returns it. You have to
  * release the allocated memory of the returned data when you no longer need it
@@ -31,34 +30,33 @@
 
 wlTilesets wlTilesetsReadFile(char *filename)
 {
-    FILE *file;
-    wlImages tiles;
-    wlTilesets tilesets;
+	FILE *file;
+	wlImages tiles;
+	wlTilesets tilesets;
 
-    // Validate parameters
-    assert(filename != NULL);
+	// Validate parameters
+	assert(filename != NULL);
 
-    // Open the file for reading and abort if this fails
-    file = fopen(filename, "rb");
-    if (!file) return NULL;
+	// Open the file for reading and abort if this fails
+	file = fopen(filename, "rb");
+	if (!file)
+		return NULL;
 
-    // Create the tilesets structure
-    tilesets = malloc(sizeof(wlTilesetsStruct));
-    listCreate(tilesets->tilesets, &(tilesets->quantity));
+	// Create the tilesets structure
+	tilesets = malloc(sizeof(wlTilesetsStruct));
+	listCreate(tilesets->tilesets, &(tilesets->quantity));
 
-    // Read the tilesets
-    while ((tiles = wlTilesReadStream(file)))
-    {
-        listAdd(tilesets->tilesets, tiles, &tilesets->quantity);
-    }
+	// Read the tilesets
+	while ((tiles = wlTilesReadStream(file))) {
+		listAdd(tilesets->tilesets, tiles, &tilesets->quantity);
+	}
 
-    // Close the file stream
-    fclose(file);
+	// Close the file stream
+	fclose(file);
 
-    // Return the tilesets
-    return tilesets;
+	// Return the tilesets
+	return tilesets;
 }
-
 
 /**
  * Releases all the memory allocated for the specified tilesets.
@@ -69,16 +67,14 @@ wlTilesets wlTilesetsReadFile(char *filename)
 
 void wlTilesetsFree(wlTilesets tilesets)
 {
-    int i;
+	int i;
 
-    assert(tilesets != NULL);
-    for (i = 0; i < tilesets->quantity; i++)
-    {
-        wlImagesFree(tilesets->tilesets[i]);
-    }
-    free(tilesets);
+	assert(tilesets != NULL);
+	for (i = 0; i < tilesets->quantity; i++) {
+		wlImagesFree(tilesets->tilesets[i]);
+	}
+	free(tilesets);
 }
-
 
 /**
  * Reads image from a huffman encoded file stream and returns it. The stream
@@ -104,26 +100,25 @@ void wlTilesetsFree(wlTilesets tilesets)
  */
 
 static wlImage readTile(FILE *stream, wlImage image, wlHuffmanNode *rootNode,
-        unsigned char *dataByte, unsigned char *dataMask)
+			unsigned char *dataByte, unsigned char *dataMask)
 {
-    int x, y;
-    int b;
+	int x, y;
+	int b;
 
-    for (y = 0; y < image->height; y++)
-    {
-        for (x = 0; x < image->width; x+= 2)
-        {
-            b = wlHuffmanReadByte(stream, rootNode, dataByte, dataMask);
-            if (b == EOF) return NULL;
-            image->pixels[y * image->width + x] = b >> 4;
-            image->pixels[y * image->width + x + 1] = b & 0x0f;
-        }
-    }
+	for (y = 0; y < image->height; y++) {
+		for (x = 0; x < image->width; x += 2) {
+			b = wlHuffmanReadByte(stream, rootNode, dataByte,
+					      dataMask);
+			if (b == EOF)
+				return NULL;
+			image->pixels[y * image->width + x] = b >> 4;
+			image->pixels[y * image->width + x + 1] = b & 0x0f;
+		}
+	}
 
-    wlImageVXorDecode(image);
-    return image;
+	wlImageVXorDecode(image);
+	return image;
 }
-
 
 /**
  * Reads a tileset from the specified file stream. The stream must already be
@@ -147,50 +142,49 @@ static wlImage readTile(FILE *stream, wlImage image, wlHuffmanNode *rootNode,
 
 wlImages wlTilesReadStream(FILE *stream)
 {
-    wlImages tiles;
-    wlImage tile;
-    wlMsqHeader header;
-    int quantity, i;
-    unsigned char dataByte, dataMask;
-    wlHuffmanNode *rootNode;
+	wlImages tiles;
+	wlImage tile;
+	wlMsqHeader header;
+	int quantity, i;
+	unsigned char dataByte, dataMask;
+	wlHuffmanNode *rootNode;
 
-    // Validate parameters
-    assert(stream != NULL);
+	// Validate parameters
+	assert(stream != NULL);
 
-    // Read and validate the MSQ header
-    header = wlMsqReadHeader(stream);
-    if (!header) return NULL;
-    if (header->type != COMPRESSED)
-    {
-        wlError("Expected MSQ block of tileset to be compressed");
-        return NULL;
-    }
+	// Read and validate the MSQ header
+	header = wlMsqReadHeader(stream);
+	if (!header)
+		return NULL;
+	if (header->type != COMPRESSED) {
+		wlError("Expected MSQ block of tileset to be compressed");
+		return NULL;
+	}
 
-    // Calculate the number of tiles
-    quantity = header->size * 2 / 16 / 16;
+	// Calculate the number of tiles
+	quantity = header->size * 2 / 16 / 16;
 
-    // Free header structure
-    free(header);
+	// Free header structure
+	free(header);
 
-    // Initialize huffman stream
-    dataByte = 0;
-    dataMask = 0;
-    if (!(rootNode = wlHuffmanReadNode(stream, &dataByte, &dataMask)))
-        return NULL;
+	// Initialize huffman stream
+	dataByte = 0;
+	dataMask = 0;
+	if (!(rootNode = wlHuffmanReadNode(stream, &dataByte, &dataMask)))
+		return NULL;
 
-    // Create the images structure which is going to hold the tiles
-    tiles = wlImagesCreate(quantity, 16, 16);
+	// Create the images structure which is going to hold the tiles
+	tiles = wlImagesCreate(quantity, 16, 16);
 
-    // Read the tiles
-    for (i = 0; i < quantity; i++)
-    {
-        tile = tiles->images[i];
-        readTile(stream, tile, rootNode, &dataByte, &dataMask);
-    }
+	// Read the tiles
+	for (i = 0; i < quantity; i++) {
+		tile = tiles->images[i];
+		readTile(stream, tile, rootNode, &dataByte, &dataMask);
+	}
 
-    // Free huffman data
-    wlHuffmanFreeNode(rootNode);
+	// Free huffman data
+	wlHuffmanFreeNode(rootNode);
 
-    // Return the tiles
-    return tiles;
+	// Return the tiles
+	return tiles;
 }
