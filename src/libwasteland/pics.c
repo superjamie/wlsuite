@@ -311,15 +311,19 @@ wlPicsAnimation wlAnimationReadStream(FILE *stream)
 
 	// Read and validate second MSQ header
 	header = wlMsqReadHeader(stream);
-	if (!header)
+	if (!header) {
+		wlAnimationFree(animation);
 		return NULL;
+	}
 	free(header);
 
 	// Initialize huffman stream for animation data
 	dataByte = 0;
 	dataMask = 0;
-	if (!(rootNode = wlHuffmanReadNode(stream, &dataByte, &dataMask)))
+	if (!(rootNode = wlHuffmanReadNode(stream, &dataByte, &dataMask))) {
+		wlAnimationFree(animation);
 		return NULL;
+	}
 
 	// Read the animation instructions
 	animation->instructions =
